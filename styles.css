@@ -269,6 +269,165 @@ p { margin: 0 0 1rem; }
 .card-body p { color: var(--muted); margin: 0; flex: 1; }
 .card-body .btn { align-self: flex-start; margin-top: 1.2rem; }
 
+/* ---------- Menu : gâteaux ---------- */
+.menu { padding: clamp(3.5rem, 7vw, 6rem) 0; }
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.4rem, 3vw, 2.2rem);
+}
+.cake {
+  background: var(--cream-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.cake:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+.cake-media { overflow: hidden; }
+.cake-media img {
+  width: 100%;
+  aspect-ratio: 16 / 12;
+  object-fit: cover;
+  transition: transform .6s var(--ease);
+}
+.cake:hover .cake-media img { transform: scale(1.05); }
+.cake-body { padding: 1.4rem 1.5rem 1.7rem; display: flex; flex-direction: column; gap: .35rem; flex: 1; }
+.cake-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.cake-head h3 { font-size: 1.55rem; }
+.price {
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--green);
+  white-space: nowrap;
+}
+.serves {
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  color: var(--gold);
+  margin: 0;
+}
+.cake-desc { color: var(--muted); margin: .5rem 0 0; font-size: .95rem; }
+.menu-note { text-align: center; color: var(--muted); font-style: italic; margin: 2.4rem 0 1.4rem; }
+.menu-cta { text-align: center; }
+
+/* ---------- Signature : features ---------- */
+.signature { background: var(--cream-deep); padding: clamp(3.5rem, 7vw, 6rem) 0; }
+.feature {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4rem);
+  align-items: center;
+  margin-top: clamp(2rem, 4vw, 3.5rem);
+}
+.feature:first-of-type { margin-top: 0; }
+.feature-media img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 6px;
+  box-shadow: var(--shadow-md);
+}
+.feature--reverse .feature-media { order: 2; }
+.feature-text h3 { font-size: clamp(1.8rem, 3.2vw, 2.4rem); margin-bottom: 1rem; }
+.feature-text p { color: var(--muted); }
+.feature-list { list-style: none; padding: 0; margin: 0 0 1.2rem; display: flex; flex-wrap: wrap; gap: .5rem .8rem; }
+.feature-list li {
+  font-size: .78rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--green);
+  background: rgba(59, 71, 62, .08);
+  border-radius: 999px;
+  padding: .35rem .9rem;
+}
+.feature-price { margin: 0 0 1.4rem; }
+.feature-price span {
+  font-family: var(--serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--green);
+}
+.tiers { display: grid; gap: .6rem; margin: 1.4rem 0 1.8rem; max-width: 340px; }
+.tier {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: .6rem;
+  border-bottom: 1px dashed var(--line);
+}
+.tier-serves { color: var(--muted); font-size: .95rem; }
+.tier-price { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--green); }
+
+/* ---------- Platters & buffets ---------- */
+.platters { padding: clamp(3.5rem, 7vw, 6rem) 0; }
+.platters-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: clamp(1.6rem, 4vw, 3rem);
+  align-items: start;
+}
+.platter-select h3, .platter-pricing h3 { font-size: 1.7rem; margin-bottom: 1.2rem; }
+.pastry-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  columns: 2;
+  column-gap: 2rem;
+}
+.pastry-list li {
+  padding: .55rem 0 .55rem 1.4rem;
+  position: relative;
+  color: var(--ink);
+  break-inside: avoid;
+  border-bottom: 1px solid var(--line);
+}
+.pastry-list li::before {
+  content: "";
+  position: absolute;
+  left: 0; top: 50%;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  transform: translateY(-50%);
+}
+.pricing-card {
+  background: var(--cream-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: .6rem 1.4rem;
+  margin-bottom: 1.1rem;
+}
+.pricing-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--line);
+}
+.pricing-row:last-child { border-bottom: none; }
+.pricing-row span { color: var(--ink); }
+.pricing-row strong { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--green); white-space: nowrap; }
+.pricing-note { font-size: .88rem; color: var(--muted); margin-bottom: 1.4rem; }
+
+.buffet {
+  margin-top: clamp(2.4rem, 5vw, 3.6rem);
+  background: linear-gradient(180deg, var(--green), var(--green-dark));
+  border-radius: 8px;
+  color: var(--cream-soft);
+  padding: clamp(2.4rem, 5vw, 3.4rem);
+}
+.buffet-inner { max-width: 640px; }
+.buffet h3 { color: var(--cream-soft); font-size: clamp(1.8rem, 3.2vw, 2.4rem); margin-bottom: 1rem; }
+.buffet p { color: rgba(247, 242, 234, .85); }
+.buffet-meta { font-size: .9rem; color: rgba(247, 242, 234, .7); margin-bottom: 1.6rem; }
+
 /* ---------- About ---------- */
 .about {
   background: var(--cream-deep);
@@ -470,12 +629,19 @@ p { margin: 0 0 1rem; }
 .reveal.is-visible { opacity: 1; transform: none; }
 
 /* ---------- Responsive ---------- */
+@media (max-width: 1000px) {
+  .menu-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
 @media (max-width: 960px) {
   .hero-grid { grid-template-columns: 1fr; }
   .hero-media { order: -1; max-width: 480px; }
   .about-grid { grid-template-columns: 1fr; }
   .about-media { max-width: 460px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  .feature, .feature--reverse { grid-template-columns: 1fr; }
+  .feature-media, .feature--reverse .feature-media { order: -1; max-width: 520px; }
+  .platters-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 860px) {
@@ -505,6 +671,8 @@ p { margin: 0 0 1rem; }
 
 @media (max-width: 620px) {
   .cards { grid-template-columns: 1fr; }
+  .menu-grid { grid-template-columns: 1fr; }
+  .pastry-list { columns: 1; }
   .insta-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr; }
   .hero-media::after { display: none; }
