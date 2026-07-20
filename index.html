@@ -28,9 +28,18 @@
         <img src="assets/images/logo.svg" alt="" class="brand-mark" />
         <span class="brand-name">Ougot</span>
       </a>
-      <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Ouvrir le menu">
-        <span></span><span></span><span></span>
-      </button>
+      <div class="header-actions">
+        <button class="cart-btn" id="cart-btn" aria-label="Ouvrir le panier">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/>
+            <path d="M2.5 3h2.2l2.2 12.2a1.6 1.6 0 0 0 1.6 1.3h8.4a1.6 1.6 0 0 0 1.6-1.2L21.5 7H6"/>
+          </svg>
+          <span class="cart-count" id="cart-count" hidden>0</span>
+        </button>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-nav" aria-label="Ouvrir le menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
       <nav class="primary-nav" id="primary-nav" aria-label="Navigation principale">
         <ul>
           <li><a href="#top" class="is-active">Accueil</a></li>
@@ -87,6 +96,7 @@
               <div class="cake-head"><h3>Fraisier</h3><span class="price">45&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Génoise moelleuse, chantilly vanille et fraises fraîches. Un incontournable de la saison.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Fraisier" data-price="45" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
 
@@ -96,6 +106,7 @@
               <div class="cake-head"><h3>Tarte aux fraises</h3><span class="price">45&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Pâte sablée, crème onctueuse et fraises fraîches glacées, généreusement garnie.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Tarte aux fraises" data-price="45" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
 
@@ -105,6 +116,7 @@
               <div class="cake-head"><h3>Royal au chocolat</h3><span class="price">45&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Dacquoise, croustillant praliné et mousse au chocolat noir. L'élégance intemporelle.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Royal au chocolat" data-price="45" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
 
@@ -114,6 +126,7 @@
               <div class="cake-head"><h3>Paris-Brest</h3><span class="price">40&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Couronne de pâte à choux, crème mousseline au praliné et noisettes torréfiées.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Paris-Brest" data-price="40" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
 
@@ -123,6 +136,7 @@
               <div class="cake-head"><h3>Tarte au citron</h3><span class="price">40&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Crème de citron acidulée et meringue légèrement flambée. Fraîcheur et gourmandise.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Tarte au citron" data-price="40" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
 
@@ -132,6 +146,7 @@
               <div class="cake-head"><h3>Pavlova</h3><span class="price">40&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Meringue croquante, chantilly vanille et fruits frais de saison. Aérienne et colorée.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Pavlova" data-price="40" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
 
@@ -141,6 +156,7 @@
               <div class="cake-head"><h3>Mille-feuille</h3><span class="price">40&nbsp;€</span></div>
               <p class="serves">6 à 8 personnes</p>
               <p class="cake-desc">Feuilletage caramélisé et crème pâtissière à la vanille. Le croustillant à l'état pur.</p>
+              <button class="btn btn-dark add-to-cart" data-name="Mille-feuille" data-price="40" data-serves="6 à 8 pers.">Ajouter au panier</button>
             </div>
           </article>
         </div>
@@ -188,11 +204,10 @@
               pochage soigné. Élégant et gourmand pour vos plus belles célébrations.
             </p>
             <div class="tiers">
-              <div class="tier"><span class="tier-serves">10 à 15 pers.</span><span class="tier-price">70&nbsp;€</span></div>
-              <div class="tier"><span class="tier-serves">15 à 20 pers.</span><span class="tier-price">80&nbsp;€</span></div>
-              <div class="tier"><span class="tier-serves">25 à 30 pers.</span><span class="tier-price">100&nbsp;€</span></div>
+              <div class="tier"><span class="tier-serves">10 à 15 pers.</span><span class="tier-price">70&nbsp;€</span><button class="btn btn-dark btn-sm add-to-cart" data-name="Layer Cake vanille & fruits rouges — 10 à 15 pers." data-price="70" data-serves="10 à 15 pers.">Ajouter</button></div>
+              <div class="tier"><span class="tier-serves">15 à 20 pers.</span><span class="tier-price">80&nbsp;€</span><button class="btn btn-dark btn-sm add-to-cart" data-name="Layer Cake vanille & fruits rouges — 15 à 20 pers." data-price="80" data-serves="15 à 20 pers.">Ajouter</button></div>
+              <div class="tier"><span class="tier-serves">25 à 30 pers.</span><span class="tier-price">100&nbsp;€</span><button class="btn btn-dark btn-sm add-to-cart" data-name="Layer Cake vanille & fruits rouges — 25 à 30 pers." data-price="100" data-serves="25 à 30 pers.">Ajouter</button></div>
             </div>
-            <a href="#contact" class="btn btn-dark">Commander</a>
           </div>
         </div>
       </div>
@@ -381,6 +396,75 @@
       <p class="footer-legal"><a href="#">Mentions légales</a> · <a href="#">Confidentialité</a></p>
     </div>
   </footer>
+
+  <!-- ===== Panier & Commande ===== -->
+  <div class="cart-overlay" id="cart-overlay" hidden></div>
+
+  <aside class="cart-drawer" id="cart-drawer" aria-label="Panier" aria-hidden="true">
+    <div class="cart-drawer-head">
+      <h2>Votre panier</h2>
+      <button class="cart-close" id="cart-close" aria-label="Fermer le panier">&times;</button>
+    </div>
+
+    <div class="cart-body" id="cart-body">
+      <!-- Vue panier -->
+      <div id="cart-view">
+        <ul class="cart-items" id="cart-items"></ul>
+        <p class="cart-empty" id="cart-empty">Votre panier est vide.</p>
+        <div class="cart-total" id="cart-total-row" hidden>
+          <span>Total</span><strong id="cart-total">0&nbsp;€</strong>
+        </div>
+        <button class="btn btn-primary btn-block" id="cart-checkout" disabled>Passer la commande</button>
+        <p class="cart-note">Paiement à la récupération / livraison. Commande confirmée après échange avec Ougot.</p>
+      </div>
+
+      <!-- Vue formulaire de commande -->
+      <form class="checkout-form" id="checkout-form" hidden>
+        <button type="button" class="checkout-back" id="checkout-back">&larr; Retour au panier</button>
+        <h3>Vos coordonnées</h3>
+
+        <label>Nom et prénom
+          <input type="text" name="nom" required autocomplete="name" />
+        </label>
+        <label>Téléphone
+          <input type="tel" name="tel" required autocomplete="tel" placeholder="06 12 34 56 78" />
+        </label>
+        <label>E-mail
+          <input type="email" name="email" required autocomplete="email" placeholder="vous@exemple.fr" />
+        </label>
+
+        <fieldset class="mode-choice">
+          <legend>Mode de réception</legend>
+          <label class="radio"><input type="radio" name="mode" value="Retrait sur place" checked /> Retrait sur place</label>
+          <label class="radio"><input type="radio" name="mode" value="Livraison" /> Livraison (en supplément)</label>
+        </fieldset>
+
+        <label class="addr-field" id="addr-field" hidden>Adresse de livraison
+          <textarea name="adresse" rows="2" placeholder="N°, rue, code postal, ville"></textarea>
+        </label>
+
+        <label>Date souhaitée
+          <input type="date" name="date" required />
+        </label>
+        <label>Message / précisions (facultatif)
+          <textarea name="message" rows="2" placeholder="Allergies, personnalisation, occasion…"></textarea>
+        </label>
+
+        <div class="checkout-summary" id="checkout-summary"></div>
+
+        <button type="submit" class="btn btn-primary btn-block">Envoyer ma commande</button>
+        <p class="cart-note">En envoyant, votre application e-mail s'ouvre avec le récapitulatif prérempli à destination d'Ougot.</p>
+      </form>
+
+      <!-- Confirmation -->
+      <div class="checkout-done" id="checkout-done" hidden>
+        <div class="check-ico">✓</div>
+        <h3>Commande prête à être envoyée !</h3>
+        <p id="checkout-done-text">Votre e-mail de commande s'est ouvert. Envoyez-le et Ougot vous recontacte rapidement pour confirmer.</p>
+        <button class="btn btn-dark btn-block" id="checkout-close-done">Fermer</button>
+      </div>
+    </div>
+  </aside>
 
   <script src="script.js"></script>
 </body>
