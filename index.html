@@ -472,12 +472,12 @@
 
       <!-- Confirmation -->
       <div class="checkout-done" id="checkout-done" hidden>
-        <div class="check-ico">✓</div>
-        <h3>Dernière étape : envoyez votre commande</h3>
-        <p id="checkout-done-text">Cliquez sur le bouton ci-dessous : WhatsApp s'ouvre avec votre commande déjà rédigée. Il ne vous reste qu'à appuyer sur « Envoyer ».</p>
+        <div class="check-ico" id="done-ico">✓</div>
+        <h3 id="done-title">Commande envoyée !</h3>
+        <p id="checkout-done-text">Merci ! Votre commande a bien été transmise à Ougot, qui vous recontacte rapidement pour confirmer. Le paiement se fait à la récupération / livraison.</p>
         <p class="order-ref" id="order-ref"></p>
-        <a class="btn btn-primary btn-block" id="wa-link" href="#" target="_blank" rel="noopener">Ouvrir WhatsApp et envoyer</a>
-        <button class="btn btn-ghost btn-block" id="checkout-close-done">Terminer</button>
+        <a class="btn btn-ghost btn-block" id="wa-link" href="#" target="_blank" rel="noopener">Envoyer aussi par WhatsApp</a>
+        <button class="btn btn-dark btn-block" id="checkout-close-done">Terminer</button>
       </div>
     </div>
   </aside>
