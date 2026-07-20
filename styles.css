@@ -366,36 +366,38 @@ p { margin: 0 0 1rem; }
 
 /* ---------- Platters & buffets ---------- */
 .platters { padding: clamp(3.5rem, 7vw, 6rem) 0; }
-.platters-grid {
+.subhead { font-size: 1.7rem; margin: 0 0 1.4rem; }
+.pastry-grid {
   display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  gap: clamp(1.6rem, 4vw, 3rem);
-  align-items: start;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2.4vw, 1.6rem);
+  margin-bottom: clamp(2.4rem, 5vw, 3.5rem);
 }
-.platter-select h3, .platter-pricing h3 { font-size: 1.7rem; margin-bottom: 1.2rem; }
-.pastry-list {
-  list-style: none;
-  padding: 0;
+.pastry {
   margin: 0;
-  columns: 2;
-  column-gap: 2rem;
+  background: var(--cream-soft);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  overflow: hidden;
+  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
-.pastry-list li {
-  padding: .55rem 0 .55rem 1.4rem;
-  position: relative;
+.pastry:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.pastry img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  transition: transform .5s var(--ease);
+}
+.pastry:hover img { transform: scale(1.05); }
+.pastry figcaption {
+  font-family: var(--serif);
+  font-size: 1.15rem;
   color: var(--ink);
-  break-inside: avoid;
-  border-bottom: 1px solid var(--line);
+  text-align: center;
+  padding: .85rem .8rem 1rem;
+  line-height: 1.25;
 }
-.pastry-list li::before {
-  content: "";
-  position: absolute;
-  left: 0; top: 50%;
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: var(--gold);
-  transform: translateY(-50%);
-}
+.platter-pricing { max-width: 460px; }
 .pricing-card {
   background: var(--cream-soft);
   border: 1px solid var(--line);
@@ -641,7 +643,7 @@ p { margin: 0 0 1rem; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
   .feature, .feature--reverse { grid-template-columns: 1fr; }
   .feature-media, .feature--reverse .feature-media { order: -1; max-width: 520px; }
-  .platters-grid { grid-template-columns: 1fr; }
+  .pastry-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
 @media (max-width: 860px) {
@@ -672,7 +674,7 @@ p { margin: 0 0 1rem; }
 @media (max-width: 620px) {
   .cards { grid-template-columns: 1fr; }
   .menu-grid { grid-template-columns: 1fr; }
-  .pastry-list { columns: 1; }
+  .pastry-grid { grid-template-columns: repeat(2, 1fr); }
   .insta-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-grid { grid-template-columns: 1fr; }
   .hero-media::after { display: none; }
