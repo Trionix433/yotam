@@ -100,7 +100,7 @@
 (function () {
   "use strict";
 
-  var ORDER_EMAIL = "contact@ougot.fr"; // ← e-mail qui reçoit les commandes (à personnaliser)
+  var ORDER_WHATSAPP = "33769652949"; // ← numéro WhatsApp d'Ougot qui reçoit les commandes
 
   var cart = [];
   try {
@@ -294,13 +294,10 @@
     lines.push("");
     lines.push("(Paiement à la récupération / livraison)");
 
-    var subject = "Commande Ougot — " + data.get("nom");
     var body = lines.join("\n");
-    var mailto = "mailto:" + ORDER_EMAIL +
-      "?subject=" + encodeURIComponent(subject) +
-      "&body=" + encodeURIComponent(body);
+    var wa = "https://wa.me/" + ORDER_WHATSAPP + "?text=" + encodeURIComponent(body);
 
-    window.location.href = mailto;
+    window.open(wa, "_blank");
     showView("done");
   });
 
