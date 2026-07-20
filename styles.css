@@ -883,3 +883,16 @@ p { margin: 0 0 1rem; }
 @media (prefers-reduced-motion: reduce) {
   .cart-drawer, .cart-overlay { transition: none; }
 }
+
+.order-ref {
+  font-family: var(--sans);
+  font-size: .82rem;
+  letter-spacing: .04em;
+  color: var(--green);
+  background: var(--cream-deep);
+  border-radius: var(--radius);
+  padding: .6rem 1rem;
+  margin: 0 0 1.2rem;
+  display: inline-block;
+}
+.checkout-done .btn + .btn { margin-top: .7rem; }

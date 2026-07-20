@@ -271,32 +271,50 @@
     summaryEl.innerHTML = html;
   }
 
+  function orderRef() {
+    var d = new Date();
+    function p(n) { return (n < 10 ? "0" : "") + n; }
+    var stamp = "" + d.getFullYear() + p(d.getMonth() + 1) + p(d.getDate());
+    var rnd = Math.floor(1000 + Math.random() * 9000);
+    return "OUG-" + stamp + "-" + rnd;
+  }
+
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     var data = new FormData(form);
+    var ref = orderRef();
     var lines = [];
-    lines.push("NOUVELLE COMMANDE — Ougot");
+    lines.push("🎂 NOUVELLE COMMANDE — Ougot");
+    lines.push("Réf : " + ref);
     lines.push("");
-    lines.push("Client : " + data.get("nom"));
-    lines.push("Téléphone : " + data.get("tel"));
+    lines.push("👤 CLIENT");
+    lines.push("Nom : " + data.get("nom"));
+    lines.push("Tél : " + data.get("tel"));
     lines.push("E-mail : " + data.get("email"));
-    lines.push("Réception : " + data.get("mode"));
-    if (data.get("mode") === "Livraison") lines.push("Adresse : " + (data.get("adresse") || ""));
-    lines.push("Date souhaitée : " + data.get("date"));
-    if (data.get("message")) lines.push("Message : " + data.get("message"));
     lines.push("");
-    lines.push("--- Commande ---");
+    lines.push("📦 RÉCEPTION : " + data.get("mode"));
+    if (data.get("mode") === "Livraison") lines.push("Adresse : " + (data.get("adresse") || ""));
+    lines.push("📅 Date souhaitée : " + data.get("date"));
+    if (data.get("message")) lines.push("📝 Message : " + data.get("message"));
+    lines.push("");
+    lines.push("🧁 COMMANDE");
     cart.forEach(function (it) {
-      lines.push("• " + it.name + " × " + it.qty + " = " + euros(it.price * it.qty));
+      lines.push("• " + it.name + " × " + it.qty + " — " + euros(it.price * it.qty));
     });
     lines.push("");
-    lines.push("TOTAL : " + euros(totalPrice()));
+    lines.push("💶 TOTAL : " + euros(totalPrice()));
     lines.push("");
     lines.push("(Paiement à la récupération / livraison)");
 
     var body = lines.join("\n");
     var wa = "https://wa.me/" + ORDER_WHATSAPP + "?text=" + encodeURIComponent(body);
 
+    var link = document.getElementById("wa-link");
+    if (link) link.href = wa;
+    var refEl = document.getElementById("order-ref");
+    if (refEl) refEl.textContent = "Numéro de commande : " + ref;
+
+    // Ouvre WhatsApp ; si le navigateur bloque, le bouton de secours prend le relais
     window.open(wa, "_blank");
     showView("done");
   });

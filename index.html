@@ -473,9 +473,11 @@
       <!-- Confirmation -->
       <div class="checkout-done" id="checkout-done" hidden>
         <div class="check-ico">✓</div>
-        <h3>Commande prête à être envoyée !</h3>
-        <p id="checkout-done-text">WhatsApp s'est ouvert avec votre commande. Envoyez le message et Ougot vous recontacte rapidement pour confirmer.</p>
-        <button class="btn btn-dark btn-block" id="checkout-close-done">Fermer</button>
+        <h3>Dernière étape : envoyez votre commande</h3>
+        <p id="checkout-done-text">Cliquez sur le bouton ci-dessous : WhatsApp s'ouvre avec votre commande déjà rédigée. Il ne vous reste qu'à appuyer sur « Envoyer ».</p>
+        <p class="order-ref" id="order-ref"></p>
+        <a class="btn btn-primary btn-block" id="wa-link" href="#" target="_blank" rel="noopener">Ouvrir WhatsApp et envoyer</a>
+        <button class="btn btn-ghost btn-block" id="checkout-close-done">Terminer</button>
       </div>
     </div>
   </aside>
