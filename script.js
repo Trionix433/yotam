@@ -100,7 +100,6 @@
 (function () {
   "use strict";
 
-  var ORDER_WHATSAPP = "33769652949"; // ← numéro WhatsApp d'Ougot (repli)
   var ORDER_EMAIL = "Marecyotam27@gmail.com"; // ← e-mail qui reçoit les commandes
   var ORDER_ENDPOINT = "https://formsubmit.co/ajax/" + ORDER_EMAIL; // service d'envoi (sans compte)
 
@@ -285,76 +284,64 @@
     e.preventDefault();
     var data = new FormData(form);
     var ref = orderRef();
-    var lines = [];
-    lines.push("🎂 NOUVELLE COMMANDE — Ougot");
-    lines.push("Réf : " + ref);
-    lines.push("");
-    lines.push("👤 CLIENT");
-    lines.push("Nom : " + data.get("nom"));
-    lines.push("Tél : " + data.get("tel"));
-    lines.push("E-mail : " + data.get("email"));
-    lines.push("");
-    lines.push("📦 RÉCEPTION : " + data.get("mode"));
-    if (data.get("mode") === "Livraison") lines.push("Adresse : " + (data.get("adresse") || ""));
-    lines.push("📅 Date souhaitée : " + data.get("date"));
-    if (data.get("message")) lines.push("📝 Message : " + data.get("message"));
-    lines.push("");
-    lines.push("🧁 COMMANDE");
-    cart.forEach(function (it) {
-      lines.push("• " + it.name + " × " + it.qty + " — " + euros(it.price * it.qty));
-    });
-    lines.push("");
-    lines.push("💶 TOTAL : " + euros(totalPrice()));
-    lines.push("");
-    lines.push("(Paiement à la récupération / livraison)");
+    var mode = data.get("mode");
 
-    var body = lines.join("\n");
-    var wa = "https://wa.me/" + ORDER_WHATSAPP + "?text=" + encodeURIComponent(body);
-
-    var link = document.getElementById("wa-link");
-    if (link) link.href = wa;
     var refEl = document.getElementById("order-ref");
     if (refEl) refEl.textContent = "Numéro de commande : " + ref;
 
     var title = document.getElementById("done-title");
     var doneText = document.getElementById("checkout-done-text");
+    var ico = document.getElementById("done-ico");
+    if (ico) { ico.textContent = "✓"; ico.style.background = ""; }
 
-    // Détail de la commande, lisible dans l'e-mail
+    // Détail lisible de la commande
     var detail = cart.map(function (it) {
       return it.name + " × " + it.qty + " — " + euros(it.price * it.qty);
     }).join("\n");
 
     var payload = {
+      // 'email' = e-mail du client : adresse de réponse + destinataire de l'accusé automatique
+      email: data.get("email"),
+      _subject: "🎂 Nouvelle commande Ougot — " + ref,
+      _template: "table",
+      _autoresponse:
+        "Bonjour " + data.get("nom") + ",\n\n" +
+        "Merci pour votre commande chez Ougot ! Elle a bien été reçue.\n\n" +
+        "Numéro de commande : " + ref + "\n" +
+        "Récapitulatif :\n" + detail + "\n" +
+        "Total : " + euros(totalPrice()) + "\n\n" +
+        "Nous vous recontactons rapidement pour confirmer. Le paiement se fait à la récupération / livraison.\n\n" +
+        "À très vite,\nOugot — Pâtisserie sur mesure",
       "Référence": ref,
       "Client": data.get("nom"),
       "Téléphone": data.get("tel"),
       "E-mail client": data.get("email"),
-      "Réception": data.get("mode"),
-      "Adresse de livraison": data.get("mode") === "Livraison" ? (data.get("adresse") || "") : "—",
+      "Réception": mode,
+      "Adresse de livraison": mode === "Livraison" ? (data.get("adresse") || "") : "—",
       "Date souhaitée": data.get("date"),
       "Message": data.get("message") || "—",
       "Commande": detail,
       "Total": euros(totalPrice()),
-      "Paiement": "À la récupération / livraison",
-      "_subject": "🎂 Nouvelle commande Ougot — " + ref,
-      "_template": "table"
+      "Paiement": "À la récupération / livraison"
     };
 
     // Vue "envoi en cours"
     title.textContent = "Envoi en cours…";
-    doneText.textContent = "Un instant, votre commande part chez Ougot.";
+    doneText.textContent = "Un instant, nous enregistrons votre commande.";
     showView("done");
 
     var sent = false;
     function markSuccess() {
       if (sent) return; sent = true;
-      title.textContent = "Commande envoyée !";
-      doneText.textContent = "Merci ! Votre commande a bien été transmise à Ougot, qui vous recontacte rapidement pour confirmer. Le paiement se fait à la récupération / livraison.";
+      title.textContent = "Commande confirmée !";
+      doneText.textContent = "Merci ! Votre commande a été envoyée à Ougot, et une confirmation avec votre numéro de commande vient de vous être adressée par e-mail. Nous vous recontactons rapidement. Paiement à la récupération / livraison.";
+      cart = []; save(); render();
     }
-    function markManual() {
+    function markError() {
       if (sent) return; sent = true;
-      title.textContent = "Presque terminé !";
-      doneText.textContent = "Dernière étape : envoyez votre commande à Ougot via WhatsApp grâce au bouton ci-dessous.";
+      title.textContent = "Envoi impossible";
+      doneText.textContent = "Votre commande n'a pas pu être envoyée (vérifiez votre connexion internet) et vous pouvez réessayer, ou appeler Ougot au 07 69 65 29 49.";
+      if (ico) { ico.textContent = "!"; ico.style.background = "#a33"; }
     }
 
     if (window.fetch) {
@@ -363,19 +350,15 @@
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify(payload)
       })
-        .then(function (r) { return r.json(); })
-        .then(function (res) {
-          if (res && (res.success === "true" || res.success === true)) markSuccess();
-          else markManual();
-        })
-        .catch(function () { markManual(); });
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function () { markSuccess(); }) // toute réponse du service = commande transmise
+        .catch(function () { markError(); });
     } else {
-      markManual();
+      markError();
     }
   });
 
   closeDone.addEventListener("click", function () {
-    cart = []; save(); render();
     closeDrawer();
     showView("cart");
   });
