@@ -896,3 +896,9 @@ p { margin: 0 0 1rem; }
   display: inline-block;
 }
 .checkout-done .btn + .btn { margin-top: .7rem; }
+
+/* ---------- Paiement en ligne (Stripe) ---------- */
+.cake-actions { display: flex; flex-direction: column; gap: .5rem; margin-top: 1.1rem; align-items: flex-start; }
+.cake-actions .btn { margin-top: 0; }
+.btn-pay { background: var(--gold); color: #fff; border-color: var(--gold); }
+.btn-pay:hover { background: #9a7748; border-color: #9a7748; }
