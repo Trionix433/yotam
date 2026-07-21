@@ -299,20 +299,32 @@
       return it.name + " × " + it.qty + " — " + euros(it.price * it.qty);
     }).join("\n");
 
+    var recap =
+      "OUGOT\n" +
+      "Pâtisserie sur mesure · Levallois-Perret\n" +
+      "━━━━━━━━━━━━━━━━━━━━━━━\n\n" +
+      "Bonjour " + data.get("nom") + ",\n\n" +
+      "Merci pour votre commande ! Nous l'avons bien reçue et nous vous\n" +
+      "recontactons très vite pour la confirmer.\n\n" +
+      "VOTRE COMMANDE\n" +
+      "· N° de commande : " + ref + "\n" +
+      cart.map(function (it) { return "· " + it.name + " × " + it.qty + " — " + euros(it.price * it.qty); }).join("\n") + "\n" +
+      "· Total : " + euros(totalPrice()) + "\n\n" +
+      "· Réception : " + mode +
+      (mode === "Livraison" ? "\n· Adresse : " + (data.get("adresse") || "") : "") + "\n" +
+      "· Date souhaitée : " + data.get("date") + "\n" +
+      "· Paiement : à la récupération / livraison\n\n" +
+      "━━━━━━━━━━━━━━━━━━━━━━━\n" +
+      "Une question ? Répondez à cet e-mail ou appelez-nous au 07 69 65 29 49.\n\n" +
+      "À très vite,\n" +
+      "L'équipe Ougot";
+
     var payload = {
-      email: data.get("email"), // e-mail du client (réponse + accusé automatique)
-      _cc: data.get("email"),   // copie garantie de la commande au client
+      email: data.get("email"), // e-mail du client (réponse + accusé automatique propre)
       _subject: "🎂 Nouvelle commande Ougot — " + ref,
-      _template: "table",
+      _template: "box",
       _captcha: "false",
-      _autoresponse:
-        "Bonjour " + data.get("nom") + ",\n\n" +
-        "Merci pour votre commande chez Ougot ! Elle a bien été reçue.\n\n" +
-        "Numéro de commande : " + ref + "\n" +
-        "Récapitulatif :\n" + detail + "\n" +
-        "Total : " + euros(totalPrice()) + "\n\n" +
-        "Nous vous recontactons rapidement pour confirmer. Paiement à la récupération / livraison.\n\n" +
-        "À très vite,\nOugot — Pâtisserie sur mesure",
+      _autoresponse: recap,
       "Référence": ref,
       "Client": data.get("nom"),
       "Téléphone": data.get("tel"),
