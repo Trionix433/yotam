@@ -301,6 +301,7 @@
 
     var payload = {
       email: data.get("email"), // e-mail du client (réponse + accusé automatique)
+      _cc: data.get("email"),   // copie garantie de la commande au client
       _subject: "🎂 Nouvelle commande Ougot — " + ref,
       _template: "table",
       _captcha: "false",
