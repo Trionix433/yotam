@@ -101,7 +101,6 @@
   "use strict";
 
   var ORDER_EMAIL = "Marecyotam27@gmail.com"; // ← e-mail qui reçoit les commandes
-  var ORDER_ENDPOINT = "https://formsubmit.co/ajax/" + ORDER_EMAIL; // service d'envoi (sans compte)
 
   var cart = [];
   try {
@@ -289,76 +288,46 @@
     var refEl = document.getElementById("order-ref");
     if (refEl) refEl.textContent = "Numéro de commande : " + ref;
 
-    var title = document.getElementById("done-title");
-    var doneText = document.getElementById("checkout-done-text");
-    var ico = document.getElementById("done-ico");
-    if (ico) { ico.textContent = "✓"; ico.style.background = ""; }
-
     // Détail lisible de la commande
     var detail = cart.map(function (it) {
-      return it.name + " × " + it.qty + " — " + euros(it.price * it.qty);
+      return "• " + it.name + " × " + it.qty + " — " + euros(it.price * it.qty);
     }).join("\n");
 
-    var payload = {
-      // 'email' = e-mail du client : adresse de réponse + destinataire de l'accusé automatique
-      email: data.get("email"),
-      _subject: "🎂 Nouvelle commande Ougot — " + ref,
-      _template: "table",
-      _autoresponse:
-        "Bonjour " + data.get("nom") + ",\n\n" +
-        "Merci pour votre commande chez Ougot ! Elle a bien été reçue.\n\n" +
-        "Numéro de commande : " + ref + "\n" +
-        "Récapitulatif :\n" + detail + "\n" +
-        "Total : " + euros(totalPrice()) + "\n\n" +
-        "Nous vous recontactons rapidement pour confirmer. Le paiement se fait à la récupération / livraison.\n\n" +
-        "À très vite,\nOugot — Pâtisserie sur mesure",
-      "Référence": ref,
-      "Client": data.get("nom"),
-      "Téléphone": data.get("tel"),
-      "E-mail client": data.get("email"),
-      "Réception": mode,
-      "Adresse de livraison": mode === "Livraison" ? (data.get("adresse") || "") : "—",
-      "Date souhaitée": data.get("date"),
-      "Message": data.get("message") || "—",
-      "Commande": detail,
-      "Total": euros(totalPrice()),
-      "Paiement": "À la récupération / livraison"
-    };
+    // Corps de l'e-mail envoyé à Ougot
+    var lines = [];
+    lines.push("Bonjour, je souhaite passer la commande suivante :");
+    lines.push("");
+    lines.push("Numéro de commande : " + ref);
+    lines.push("");
+    lines.push("Nom : " + data.get("nom"));
+    lines.push("Téléphone : " + data.get("tel"));
+    lines.push("E-mail : " + data.get("email"));
+    lines.push("Réception : " + mode);
+    if (mode === "Livraison") lines.push("Adresse : " + (data.get("adresse") || ""));
+    lines.push("Date souhaitée : " + data.get("date"));
+    if (data.get("message")) lines.push("Message : " + data.get("message"));
+    lines.push("");
+    lines.push("Commande :");
+    lines.push(detail);
+    lines.push("");
+    lines.push("Total : " + euros(totalPrice()));
+    lines.push("Paiement : à la récupération / livraison");
 
-    // Vue "envoi en cours"
-    title.textContent = "Envoi en cours…";
-    doneText.textContent = "Un instant, nous enregistrons votre commande.";
+    var subject = "Commande Ougot — " + ref;
+    var mailto = "mailto:" + ORDER_EMAIL +
+      "?subject=" + encodeURIComponent(subject) +
+      "&body=" + encodeURIComponent(lines.join("\n"));
+
+    var link = document.getElementById("mail-link");
+    if (link) link.href = mailto;
+
+    // Ouvre l'application e-mail avec la commande déjà rédigée
     showView("done");
-
-    var sent = false;
-    function markSuccess() {
-      if (sent) return; sent = true;
-      title.textContent = "Commande confirmée !";
-      doneText.textContent = "Merci ! Votre commande a été envoyée à Ougot, et une confirmation avec votre numéro de commande vient de vous être adressée par e-mail. Nous vous recontactons rapidement. Paiement à la récupération / livraison.";
-      cart = []; save(); render();
-    }
-    function markError() {
-      if (sent) return; sent = true;
-      title.textContent = "Envoi impossible";
-      doneText.textContent = "Votre commande n'a pas pu être envoyée (vérifiez votre connexion internet) et vous pouvez réessayer, ou appeler Ougot au 07 69 65 29 49.";
-      if (ico) { ico.textContent = "!"; ico.style.background = "#a33"; }
-    }
-
-    if (window.fetch) {
-      fetch(ORDER_ENDPOINT, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(payload)
-      })
-        .then(function (r) { return r.json().catch(function () { return {}; }); })
-        .then(function () { markSuccess(); }) // toute réponse du service = commande transmise
-        .catch(function () { markError(); });
-    } else {
-      markError();
-    }
+    window.location.href = mailto;
   });
 
   closeDone.addEventListener("click", function () {
+    cart = []; save(); render();
     closeDrawer();
     showView("cart");
   });
