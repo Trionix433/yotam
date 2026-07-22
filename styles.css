@@ -964,6 +964,16 @@ p { margin: 0 0 1rem; }
 .btn-pay:hover { background: #9a7748; border-color: #9a7748; }
 .cake-pay.is-soon { background: var(--cream-deep); color: var(--muted); border-color: var(--line); cursor: default; pointer-events: none; }
 
+/* Rappel du délai de 6 jours */
+.cake-delay { margin: 1.1rem 0 0; font-size: .82rem; color: var(--green); display: flex; align-items: center; gap: .3rem; }
+.cake-delay strong { color: var(--green); }
+.cart-delay {
+  margin: 0 0 1rem; padding: .7rem .9rem; border-radius: var(--radius);
+  background: rgba(176, 139, 90, .12); border: 1px solid rgba(176, 139, 90, .3);
+  font-size: .85rem; color: var(--ink); text-align: center;
+}
+.cart-delay strong { color: var(--green); }
+
 /* Layer cake : actions par palier (payer + ajouter) */
 .tier-actions { margin-left: auto; display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .tier-actions .add-to-cart { margin-left: 0; }

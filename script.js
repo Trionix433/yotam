@@ -235,6 +235,26 @@
     }
   }
 
+  // Rappel du délai de 6 jours sur chaque carte gâteau
+  document.querySelectorAll(".cake .cake-actions").forEach(function (actions) {
+    var p = document.createElement("p");
+    p.className = "cake-delay";
+    p.innerHTML = "🗓️ À commander au moins <strong>6 jours</strong> à l'avance";
+    actions.parentNode.insertBefore(p, actions);
+  });
+
+  // Rappel obligatoire du délai avant tout paiement (Stripe)
+  var DELAY_MSG =
+    "🗓️ Rappel important\n\n" +
+    "Toute commande doit être passée au minimum 6 JOURS avant la date souhaitée.\n\n" +
+    "Souhaitez-vous continuer vers le paiement ?";
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a.btn-pay");
+    if (!a) return;
+    if (a.classList.contains("is-soon") || !a.getAttribute("href")) { e.preventDefault(); return; }
+    if (!window.confirm(DELAY_MSG)) e.preventDefault();
+  });
+
   // Boutons d'option (taille / pareve-halavi)
   document.querySelectorAll(".cake .opt-group").forEach(function (group) {
     group.querySelectorAll(".opt").forEach(function (opt) {
