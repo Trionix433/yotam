@@ -99,16 +99,20 @@
       "layer-cake": {
         eyebrow:"Layer Cake sur mesure",
         title:"Personnalisez votre Layer Cake",
-        intro:"Un gâteau à étages entièrement personnalisé : parfums, couleurs, décor et message. Dites-nous tout, on s'occupe du reste.",
-        subject:"🎂 Devis Layer Cake — Ougot",
+        intro:"Choisissez la taille, personnalisez votre gâteau (couleurs, décor, message), puis réglez en ligne. Commande à passer au moins 6 jours à l'avance.",
+        subject:"🎂 Commande Layer Cake — Ougot",
+        pay:true,
+        sizes:[
+          {label:"10 à 15 personnes — 70 €", url:"https://buy.stripe.com/3cIdR93nN7QL68Yg5i18c07"},
+          {label:"15 à 20 personnes — 80 €", url:"https://buy.stripe.com/14AdR9f6vdb540Q1ao18c08"},
+          {label:"25 à 30 personnes — 100 €", url:"https://buy.stripe.com/00wbJ17E3fjdape5qE18c09"}
+        ],
         fields:[
-          {name:"personnes",label:"Nombre de personnes",type:"text",placeholder:"ex. 20 personnes"},
           {name:"date",label:"Date de l'événement",type:"date"},
-          {name:"parfums",label:"Parfums souhaités",type:"text",placeholder:"ex. vanille & fruits rouges",full:true},
           {name:"couleurs",label:"Couleurs / thème",type:"text",placeholder:"ex. tons pastel, thème floral…",full:true},
           {name:"message",label:"Message à écrire sur le gâteau",type:"text",placeholder:"ex. Joyeux anniversaire Sarah",full:true},
           KIND,
-          {name:"details",label:"Décrivez votre projet",type:"textarea",placeholder:"Décor, étages, inspiration, contraintes… tout ce que vous imaginez.",full:true}
+          {name:"details",label:"Précisions",type:"textarea",placeholder:"Décor, étages, inspiration, contraintes… tout ce que vous imaginez.",full:true}
         ]
       },
       "number-cake": {
@@ -210,11 +214,19 @@
       return '<div class="field'+full+'"><label for="f-'+f.name+'">'+esc(f.label)+req+'</label>'+inner+'</div>';
     }
 
+    // Champ taille + prix (produits payables, ex. layer cake)
+    var sizeField = null;
+    if (cfg.sizes) {
+      sizeField = { name:"taille_prix", label:"Taille & prix", type:"select", options: cfg.sizes.map(function(s){ return s.label; }), required:true, full:true };
+    }
+
     var html = "";
     common.forEach(function(f){ html += fieldHTML(f); });
+    if (sizeField) html += fieldHTML(sizeField);
     cfg.fields.forEach(function(f){ html += fieldHTML(f); });
     html += '<p class="msg" id="msg" hidden></p>';
-    html += '<div class="submit"><button type="submit" class="send" id="send">Envoyer ma demande de devis</button></div>';
+    var sendLabel = cfg.pay ? "Valider et payer 💳" : "Envoyer ma demande de devis";
+    html += '<div class="submit"><button type="submit" class="send" id="send">' + sendLabel + '</button></div>';
     host.innerHTML = html;
 
     // Date minimum : 6 jours à l'avance
@@ -231,10 +243,21 @@
       var emailEl = document.getElementById("f-email");
       if(!emailEl.value.trim()){ emailEl.focus(); return; }
 
+      // Produit payable : la taille (et donc le lien de paiement) est obligatoire
+      var payUrl = null;
+      if (cfg.pay && cfg.sizes) {
+        var sizeEl = document.getElementById("f-taille_prix");
+        var chosen = sizeEl ? sizeEl.value : "";
+        var match = cfg.sizes.filter(function(s){ return s.label === chosen; })[0];
+        if (!match) { if (sizeEl) sizeEl.focus(); return; }
+        payUrl = match.url;
+      }
+
       var labels = {};
-      common.concat(cfg.fields).forEach(function(f){ if(f.name) labels[f.name]=f.label; });
+      common.concat(sizeField ? [sizeField] : [], cfg.fields).forEach(function(f){ if(f.name) labels[f.name]=f.label; });
 
       var payload = { _subject: cfg.subject, _template:"table", _captcha:"false", "Sujet du devis": cfg.eyebrow };
+      if (cfg.pay) payload["Paiement"] = "Le client est redirigé vers le paiement Stripe après ce formulaire.";
       var data = new FormData(form);
       data.forEach(function(v,k){
         if(v && String(v).trim()) payload[labels[k]||k] = v;
@@ -245,13 +268,24 @@
       msg.hidden = true;
 
       function finish(ok){
-        send.disabled = false; send.textContent = original;
         msg.hidden = false;
         msg.className = "msg " + (ok?"ok":"err");
-        msg.innerHTML = ok
-          ? "✓ Merci ! Votre demande de devis a bien été envoyée. Nous vous recontactons très vite."
-          : "Un souci d'envoi. Réessayez, ou écrivez-nous au 07 69 65 29 49.";
-        if(ok){ form.reset(); msg.scrollIntoView({behavior:"smooth",block:"center"}); }
+        if(!ok){
+          send.disabled = false; send.textContent = original;
+          msg.innerHTML = "Un souci d'envoi. Réessayez, ou écrivez-nous au 07 69 65 29 49.";
+          return;
+        }
+        if(payUrl){
+          send.textContent = "Redirection…";
+          msg.innerHTML = "✓ Personnalisation enregistrée ! Redirection vers le paiement sécurisé…";
+          msg.scrollIntoView({behavior:"smooth",block:"center"});
+          setTimeout(function(){ window.location.href = payUrl; }, 1400);
+        } else {
+          send.disabled = false; send.textContent = original;
+          msg.innerHTML = "✓ Merci ! Votre demande de devis a bien été envoyée. Nous vous recontactons très vite.";
+          form.reset();
+          msg.scrollIntoView({behavior:"smooth",block:"center"});
+        }
       }
 
       fetch(ENDPOINT,{ method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify(payload) })
