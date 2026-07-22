@@ -288,14 +288,14 @@ p { margin: 0 0 1rem; }
   transition: transform .35s var(--ease), box-shadow .35s var(--ease);
 }
 .cake:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
-.cake-media { overflow: hidden; }
+.cake-media { overflow: hidden; background: var(--cream-deep); }
 .cake-media img {
   width: 100%;
-  aspect-ratio: 16 / 12;
-  object-fit: cover;
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
   transition: transform .6s var(--ease);
 }
-.cake:hover .cake-media img { transform: scale(1.05); }
+.cake:hover .cake-media img { transform: scale(1.03); }
 .cake-body { padding: 1.4rem 1.5rem 1.7rem; display: flex; flex-direction: column; gap: .35rem; flex: 1; }
 .cake-head { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
 .cake-head h3 { font-size: 1.55rem; }
