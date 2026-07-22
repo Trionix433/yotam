@@ -127,16 +127,19 @@
     });
   }
 
-  function inCart(name) {
-    for (var i = 0; i < cart.length; i++) if (cart[i].name === name) return true;
+  // Clé unique d'un article (nom + taille + pareve/halavi)
+  cart.forEach(function (it) { if (!it.key) it.key = it.name + "|" + (it.serves || ""); });
+
+  function inCart(key) {
+    for (var i = 0; i < cart.length; i++) if (cart[i].key === key) return true;
     return false;
   }
-  function addToCart(name, price, serves, pay) {
-    if (!inCart(name)) cart.push({ name: name, price: price, serves: serves || "", pay: pay || "" });
+  function addToCart(item) {
+    if (!inCart(item.key)) cart.push(item);
     save(); render();
   }
-  function removeItem(name) {
-    cart = cart.filter(function (i) { return i.name !== name; });
+  function removeItem(key) {
+    cart = cart.filter(function (i) { return i.key !== key; });
     save(); render();
   }
 
@@ -166,7 +169,7 @@
         (it.serves ? '<span class="ci-serves">' + esc(it.serves) + '</span>' : '<span></span>') +
         action +
         '<button type="button" class="ci-remove">Retirer</button>';
-      li.querySelector(".ci-remove").addEventListener("click", function () { removeItem(it.name); });
+      li.querySelector(".ci-remove").addEventListener("click", function () { removeItem(it.key); });
       itemsEl.appendChild(li);
     });
   }
@@ -186,9 +189,74 @@
     setTimeout(function () { overlay.hidden = true; }, 320);
   }
 
+  // Lecture de la sélection (taille + pareve/halavi) d'une carte gâteau
+  function readCake(card) {
+    var name = (card.querySelector("h3") || {}).textContent || "";
+    name = name.trim();
+    var size = card.querySelector(".opt-size .opt.is-active");
+    var kind = card.querySelector(".opt-kind .opt.is-active");
+    var serves = size ? size.dataset.serves : "";
+    var price = size ? parseFloat(size.dataset.price) : 0;
+    var pay = size ? (size.dataset.pay || "") : "";
+    var k = kind ? kind.dataset.kind : "";
+    var serveLabel = (serves ? serves : "") + (k ? " · " + k : "");
+    return {
+      name: name,
+      price: price,
+      serves: serveLabel,
+      pay: pay,
+      key: name + "|" + serves + "|" + k
+    };
+  }
+
+  // Met à jour le prix affiché + le bouton « Payer » selon la taille choisie
+  function updateCard(card) {
+    var size = card.querySelector(".opt-size .opt.is-active");
+    var priceEl = card.querySelector(".price");
+    var payBtn = card.querySelector(".cake-pay");
+    if (size && priceEl) priceEl.textContent = size.dataset.price + " €";
+    if (size && payBtn) {
+      var pay = size.dataset.pay || "";
+      if (pay) {
+        payBtn.setAttribute("href", pay);
+        payBtn.setAttribute("target", "_blank");
+        payBtn.setAttribute("rel", "noopener");
+        payBtn.textContent = "Payer en ligne 💳";
+        payBtn.classList.remove("is-devis");
+      } else {
+        payBtn.setAttribute("href", "#contact");
+        payBtn.removeAttribute("target");
+        payBtn.removeAttribute("rel");
+        payBtn.textContent = "Réserver — sur devis 💬";
+        payBtn.classList.add("is-devis");
+      }
+    }
+  }
+
+  // Boutons d'option (taille / pareve-halavi)
+  document.querySelectorAll(".cake .opt-group").forEach(function (group) {
+    group.querySelectorAll(".opt").forEach(function (opt) {
+      opt.addEventListener("click", function () {
+        group.querySelectorAll(".opt").forEach(function (o) { o.classList.remove("is-active"); });
+        opt.classList.add("is-active");
+        updateCard(group.closest(".cake"));
+      });
+    });
+  });
+
   document.querySelectorAll(".add-to-cart").forEach(function (btn) {
     btn.addEventListener("click", function () {
-      addToCart(btn.dataset.name, parseFloat(btn.dataset.price), btn.dataset.serves, btn.dataset.pay);
+      var card = btn.closest(".cake");
+      var item = card
+        ? readCake(card)
+        : {
+            name: btn.dataset.name,
+            price: parseFloat(btn.dataset.price),
+            serves: btn.dataset.serves || "",
+            pay: btn.dataset.pay || "",
+            key: btn.dataset.name + "|" + (btn.dataset.serves || "")
+          };
+      addToCart(item);
       var label = btn.textContent;
       btn.textContent = "✓ Ajouté";
       btn.classList.add("added");

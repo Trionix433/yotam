@@ -934,11 +934,36 @@ p { margin: 0 0 1rem; }
 }
 .checkout-done .btn + .btn { margin-top: .7rem; }
 
+/* ---------- Options gâteau (taille + pareve/halavi) ---------- */
+.cake-options { margin-top: 1rem; display: grid; gap: .6rem; }
+.opt-group { display: flex; flex-wrap: wrap; gap: .4rem; }
+.opt-group .opt {
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: .82rem;
+  padding: .45rem .8rem;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--cream-soft);
+  color: var(--ink);
+  transition: all .18s var(--ease);
+  white-space: nowrap;
+}
+.opt-group .opt:hover { border-color: var(--gold); }
+.opt-group .opt.is-active {
+  background: var(--green);
+  border-color: var(--green);
+  color: var(--cream-soft);
+}
+.opt-kind .opt.is-active { background: var(--gold); border-color: var(--gold); }
+
 /* ---------- Paiement en ligne (Stripe) ---------- */
 .cake-actions { display: flex; flex-direction: column; gap: .5rem; margin-top: 1.1rem; align-items: flex-start; }
 .cake-actions .btn { margin-top: 0; }
 .btn-pay { background: var(--gold); color: #fff; border-color: var(--gold); }
 .btn-pay:hover { background: #9a7748; border-color: #9a7748; }
+.cake-pay.is-devis { background: transparent; color: var(--green); border-color: var(--green); }
+.cake-pay.is-devis:hover { background: var(--green); color: var(--cream-soft); }
 
 /* Layer cake : actions par palier (payer + ajouter) */
 .tier-actions { margin-left: auto; display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
