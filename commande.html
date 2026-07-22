@@ -126,7 +126,7 @@
     var html = "";
     html += '<div class="field"><label for="f-nom">Prénom & nom <span class="req">*</span></label><input type="text" id="f-nom" name="nom" placeholder="Votre nom" required></div>';
     html += '<div class="field"><label for="f-email">E-mail <span class="req">*</span></label><input type="email" id="f-email" name="email" placeholder="vous@exemple.com" required></div>';
-    html += '<div class="field"><label for="f-tel">Téléphone</label><input type="tel" id="f-tel" name="tel" placeholder="06 12 34 56 78"></div>';
+    html += '<div class="field"><label for="f-tel">Téléphone <span class="req">*</span></label><input type="tel" id="f-tel" name="tel" placeholder="06 12 34 56 78" required></div>';
     html += '<div class="field"><label for="f-date">Date de retrait / livraison <span class="req">*</span></label><input type="date" id="f-date" name="date" required></div>';
     html += '<div class="field full"><label>Mode de récupération <span class="req">*</span></label><div class="chips">' +
               '<input type="radio" id="r-retrait" name="reception" value="Retrait sur place" checked><label for="r-retrait">Retrait sur place</label>' +
@@ -134,7 +134,7 @@
             '</div></div>';
     html += '<div class="field full" id="addr-wrap" hidden><label for="f-addr">Adresse de livraison <span class="req">*</span></label><input type="text" id="f-addr" name="adresse" placeholder="N°, rue, code postal, ville"></div>';
     html += '<p class="note" id="addr-note" hidden>🚚 Livraison à <strong>Paris et ses alentours</strong> (Levallois-Perret et environs) : <strong>+10 € de frais</strong>, à régler <strong>à l\'arrivée</strong> (en espèces au livreur). Le gâteau, lui, se règle en ligne par carte.</p>';
-    html += '<div class="field full"><label for="f-precisions">Précisions / allergies</label><textarea id="f-precisions" name="precisions" placeholder="Allergies, intolérances, message sur le gâteau, demandes particulières…"></textarea></div>';
+    html += '<div class="field full"><label for="f-precisions">Précisions / allergies <span class="req">*</span></label><textarea id="f-precisions" name="precisions" placeholder="Allergies, intolérances, message sur le gâteau, demandes particulières… (écrivez « aucune » si rien à signaler)" required></textarea></div>';
 
     html += '<div class="pay-block">';
     if (pay) {
@@ -185,16 +185,25 @@
     var msg = document.getElementById("msg");
     function showMsg(ok, text){ msg.hidden=false; msg.className="msg "+(ok?"ok":"err"); msg.innerHTML=text; msg.scrollIntoView({behavior:"smooth",block:"center"}); }
 
+    function missing(el, label){
+      el.focus();
+      showMsg(false, "⚠️ Merci de remplir tous les champs obligatoires. Il manque : <strong>" + label + "</strong>.");
+      return false;
+    }
     function validate(){
-      var nom = document.getElementById("f-nom").value.trim();
-      var email = document.getElementById("f-email").value.trim();
-      var date = document.getElementById("f-date").value;
+      var nomEl = document.getElementById("f-nom");
+      var emailEl = document.getElementById("f-email");
+      var telEl = document.getElementById("f-tel");
+      var precEl = document.getElementById("f-precisions");
       var livr = document.getElementById("r-livr").checked;
-      if(!nom){ document.getElementById("f-nom").focus(); return false; }
-      if(!email){ document.getElementById("f-email").focus(); return false; }
-      if(!date){ document.getElementById("f-date").focus(); return false; }
-      if(date < min){ dateEl.value=""; dateEl.focus(); showMsg(false, "🗓️ Date trop proche : il faut un délai d'au moins 6 jours. Première date possible : le " + frMin + "."); return false; }
-      if(livr && !addrInput.value.trim()){ addrInput.focus(); return false; }
+      if(!nomEl.value.trim()) return missing(nomEl, "Prénom & nom");
+      if(!emailEl.value.trim()) return missing(emailEl, "E-mail");
+      if(!/.+@.+\..+/.test(emailEl.value.trim())) return missing(emailEl, "un e-mail valide");
+      if(!telEl.value.trim()) return missing(telEl, "Téléphone");
+      if(!dateEl.value) return missing(dateEl, "Date de retrait / livraison");
+      if(dateEl.value < min){ dateEl.value=""; dateEl.focus(); showMsg(false, "🗓️ Date trop proche : il faut un délai d'au moins 6 jours. Première date possible : le " + frMin + "."); return false; }
+      if(livr && !addrInput.value.trim()) return missing(addrInput, "Adresse de livraison");
+      if(!precEl.value.trim()) return missing(precEl, "Précisions / allergies (écrivez « aucune » si rien)");
       return true;
     }
 
