@@ -99,11 +99,15 @@
       "layer-cake": {
         eyebrow:"Layer Cake",
         title:"Personnalisez votre Layer Cake",
-        intro:"Merci pour votre commande ! Personnalisez ici votre gâteau : couleurs, décor et message. Nous préparons tout selon vos envies.",
+        intro:"Choisissez la taille, personnalisez votre gâteau (couleurs, décor, message), puis réglez en ligne. Commande à passer au moins 6 jours à l'avance.",
         subject:"🎂 Personnalisation Layer Cake — Ougot",
-        perso:true,
+        pay:true,
+        sizes:[
+          {label:"10 à 15 personnes — 70 €", url:"https://buy.stripe.com/3cIdR93nN7QL68Yg5i18c07"},
+          {label:"15 à 20 personnes — 80 €", url:"https://buy.stripe.com/14AdR9f6vdb540Q1ao18c08"},
+          {label:"25 à 30 personnes — 100 €", url:"https://buy.stripe.com/00wbJ17E3fjdape5qE18c09"}
+        ],
         fields:[
-          {name:"taille",label:"Taille commandée",type:"select",required:true,options:["10 à 15 personnes — 70 €","15 à 20 personnes — 80 €","25 à 30 personnes — 100 €"]},
           {name:"date",label:"Date de l'événement",type:"date"},
           {name:"couleurs",label:"Couleurs / thème",type:"text",placeholder:"ex. tons pastel, thème floral…",full:true},
           {name:"message",label:"Message à écrire sur le gâteau",type:"text",placeholder:"ex. Joyeux anniversaire Sarah",full:true},
@@ -221,7 +225,7 @@
     if (sizeField) html += fieldHTML(sizeField);
     cfg.fields.forEach(function(f){ html += fieldHTML(f); });
     html += '<p class="msg" id="msg" hidden></p>';
-    var sendLabel = cfg.pay ? "Valider et payer 💳" : (cfg.perso ? "Envoyer ma personnalisation" : "Envoyer ma demande de devis");
+    var sendLabel = cfg.pay ? "Envoyer et payer 💳" : "Envoyer ma demande de devis";
     html += '<div class="submit"><button type="submit" class="send" id="send">' + sendLabel + '</button></div>';
     host.innerHTML = html;
 
