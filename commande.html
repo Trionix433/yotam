@@ -161,16 +161,26 @@
       }
     });
 
-    // Affichage adresse si livraison
+    // Affichage adresse si livraison + gestion du paiement sur place
     var addrWrap = document.getElementById("addr-wrap");
     var addrNote = document.getElementById("addr-note");
     var addrInput = document.getElementById("f-addr");
+    var btnOnsiteEl = document.getElementById("btn-onsite");
+    function updateReception(){
+      var livr = document.getElementById("r-livr").checked;
+      addrWrap.hidden = !livr; addrNote.hidden = !livr;
+      // En livraison : paiement en ligne obligatoire, on désactive « payer sur place »
+      if (btnOnsiteEl) {
+        btnOnsiteEl.disabled = livr;
+        btnOnsiteEl.textContent = livr
+          ? "Payer sur place — indisponible en livraison"
+          : "Payer sur place (au retrait)";
+      }
+    }
     document.querySelectorAll('input[name="reception"]').forEach(function(r){
-      r.addEventListener("change", function(){
-        var livr = document.getElementById("r-livr").checked;
-        addrWrap.hidden = !livr; addrNote.hidden = !livr;
-      });
+      r.addEventListener("change", updateReception);
     });
+    updateReception();
 
     var msg = document.getElementById("msg");
     function showMsg(ok, text){ msg.hidden=false; msg.className="msg "+(ok?"ok":"err"); msg.innerHTML=text; msg.scrollIntoView({behavior:"smooth",block:"center"}); }
