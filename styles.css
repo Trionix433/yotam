@@ -910,3 +910,7 @@ p { margin: 0 0 1rem; }
 /* Devis rapide (pied de page) */
 .footer-devis-text { font-size: .85rem; color: rgba(247,242,234,.7); margin: 0 0 .8rem; }
 .footer-devis-msg { font-size: .85rem; margin: .8rem 0 0; line-height: 1.5; }
+
+/* Panier : action de paiement par article */
+.ci-pay { grid-column: 1; justify-self: start; margin-top: .5rem; }
+.ci-devis { grid-column: 1; margin-top: .5rem; font-size: .74rem; text-transform: uppercase; letter-spacing: .12em; color: var(--gold); }

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Ougot — Activer la réception des commandes</title>
+  <title>Ougot — Activer la réception des demandes de devis</title>
   <style>
     :root { --cream:#f7f2ea; --soft:#faf6ef; --green:#3b473e; --green-dark:#2f382f; --ink:#2b2b28; --muted:#6f6a61; --gold:#b08b5a; --line:#e3d9c8; }
     * { box-sizing:border-box; }
@@ -34,14 +34,14 @@
     <div id="step1">
       <div class="logo">Ougot</div>
       <div class="eyebrow">Configuration · une seule fois</div>
-      <h1>Activer la réception des commandes par e-mail</h1>
+      <h1>Activer la réception des demandes de devis par e-mail</h1>
       <p>
         En appuyant sur le bouton ci-dessous, un e-mail d'activation sera envoyé à
-        <span class="mail">Marecyotam27@gmail.com</span>. Il suffira de cliquer sur
+        <span class="mail">ougot27@gmail.com</span>. Il suffira de cliquer sur
         « Activate » dans cet e-mail. Ensuite, <strong>toutes les commandes du site
         arriveront automatiquement</strong> dans cette boîte mail.
       </p>
-      <button id="activate-btn" type="button" onclick="activate()">Activer la réception des commandes</button>
+      <button id="activate-btn" type="button" onclick="activate()">Activer la réception des demandes de devis</button>
       <p class="note">Gratuit · Aucune inscription · À faire une seule fois</p>
     </div>
 
@@ -50,16 +50,16 @@
       <h1>C'est parti !</h1>
       <p>
         Un e-mail d'activation vient d'être envoyé à
-        <span class="mail">Marecyotam27@gmail.com</span>.
+        <span class="mail">ougot27@gmail.com</span>.
       </p>
       <div class="steps">
         <ol>
-          <li>Ouvre la boîte <span class="mail">Marecyotam27@gmail.com</span></li>
+          <li>Ouvre la boîte <span class="mail">ougot27@gmail.com</span></li>
           <li>Cherche l'e-mail de <strong>« FormSubmit »</strong> (vérifie aussi les <strong>spams</strong>)</li>
           <li>Clique sur le bouton <strong>« Activate Form »</strong></li>
         </ol>
       </div>
-      <p>✅ Ensuite, toutes les commandes t'arriveront automatiquement par e-mail.</p>
+      <p>✅ Ensuite, toutes les demandes de devis t'arriveront automatiquement par e-mail.</p>
     </div>
   </div>
 
@@ -72,7 +72,7 @@
       var btn = document.getElementById("activate-btn");
       btn.disabled = true;
       btn.textContent = "Envoi en cours…";
-      fetch("https://formsubmit.co/ajax/Marecyotam27@gmail.com", {
+      fetch("https://formsubmit.co/ajax/ougot27@gmail.com", {
         method: "POST",
         headers: { "Content-Type": "application/json", "Accept": "application/json" },
         body: JSON.stringify({
