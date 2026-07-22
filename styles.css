@@ -447,9 +447,38 @@ p { margin: 0 0 1rem; }
   border-bottom: 1px solid var(--line);
 }
 .pricing-row:last-child { border-bottom: none; }
-.pricing-row span { color: var(--ink); }
+.pricing-row span { color: var(--ink); display: flex; flex-direction: column; }
+.pricing-row span em { font-style: normal; font-size: .82rem; color: var(--muted); margin-top: .15rem; }
 .pricing-row strong { font-family: var(--serif); font-size: 1.4rem; font-weight: 600; color: var(--green); white-space: nowrap; }
 .pricing-note { font-size: .88rem; color: var(--muted); margin-bottom: 1.4rem; }
+
+.platter-sub { font-size: .95rem; color: var(--muted); margin: -0.6rem 0 1.2rem; }
+.platter-pareve { font-size: .9rem; color: var(--green); margin-top: 1.2rem; }
+.platter-pareve strong { color: var(--green); }
+
+/* Notice délai / livraison / cacherout */
+.lead-notice {
+  margin: 1.6rem auto 0;
+  max-width: 760px;
+  background: var(--cream-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: .7rem 1.4rem;
+  font-size: .9rem;
+  color: var(--ink);
+  text-align: center;
+}
+.lead-notice strong { color: var(--green); }
+
+/* Layer cake : note personnalisation */
+.feature-custom {
+  margin-top: 1.4rem;
+  font-size: .92rem;
+  color: var(--muted);
+  border-left: 2px solid var(--gold);
+  padding-left: 1rem;
+}
+.feature-custom a { color: var(--green); text-decoration: underline; }
 
 .buffet-section {
   display: grid;
@@ -647,7 +676,9 @@ p { margin: 0 0 1rem; }
 .footer-list a { transition: color .2s var(--ease); }
 .footer-list a:hover { color: var(--cream-soft); }
 .footer-form { display: grid; gap: .8rem; }
-.footer-form input {
+.footer-form input,
+.footer-form select,
+.footer-form textarea {
   width: 100%;
   padding: .85rem 1rem;
   border-radius: var(--radius);
@@ -657,8 +688,14 @@ p { margin: 0 0 1rem; }
   font-family: var(--sans);
   font-size: .9rem;
 }
-.footer-form input::placeholder { color: rgba(247, 242, 234, .55); }
-.footer-form input:focus { outline: none; border-color: var(--gold); }
+.footer-form textarea { resize: vertical; min-height: 3.4rem; }
+.footer-form select { appearance: none; cursor: pointer; }
+.footer-form select option { color: #2b2b28; }
+.footer-form input::placeholder,
+.footer-form textarea::placeholder { color: rgba(247, 242, 234, .55); }
+.footer-form input:focus,
+.footer-form select:focus,
+.footer-form textarea:focus { outline: none; border-color: var(--gold); }
 .footer-bottom {
   display: flex;
   flex-wrap: wrap;

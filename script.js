@@ -214,6 +214,10 @@
   var form = document.getElementById("devis-form");
   if (!form) return;
   var input = form.querySelector('input[type="email"]');
+  var phoneEl = document.getElementById("ff-phone");
+  var eventEl = document.getElementById("ff-event");
+  var dateEl = document.getElementById("ff-date");
+  var messageEl = document.getElementById("ff-message");
   var btn = form.querySelector('button[type="submit"]');
   var msg = document.getElementById("devis-msg");
 
@@ -231,7 +235,11 @@
       _template: "table",
       _captcha: "false",
       "Type de demande": "Devis / être recontacté",
-      "E-mail du client": email
+      "E-mail du client": email,
+      "Téléphone": (phoneEl && phoneEl.value.trim()) || "—",
+      "Type d'événement": (eventEl && eventEl.value.trim()) || "—",
+      "Date souhaitée": (dateEl && dateEl.value.trim()) || "—",
+      "Message": (messageEl && messageEl.value.trim()) || "—"
     };
 
     function finish(ok) {
@@ -244,7 +252,13 @@
           : "Un souci d'envoi. Réessayez, ou écrivez-nous au 07 69 65 29 49.";
         msg.style.color = ok ? "var(--cream-soft)" : "#f0b8b0";
       }
-      if (ok) input.value = "";
+      if (ok) {
+        input.value = "";
+        if (phoneEl) phoneEl.value = "";
+        if (eventEl) eventEl.value = "";
+        if (dateEl) dateEl.value = "";
+        if (messageEl) messageEl.value = "";
+      }
     }
 
     if (window.fetch) {
