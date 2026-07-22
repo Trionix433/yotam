@@ -222,13 +222,15 @@
         payBtn.setAttribute("target", "_blank");
         payBtn.setAttribute("rel", "noopener");
         payBtn.textContent = "Payer en ligne 💳";
-        payBtn.classList.remove("is-devis");
+        payBtn.classList.remove("is-soon");
+        payBtn.removeAttribute("aria-disabled");
       } else {
-        payBtn.setAttribute("href", "#contact");
+        payBtn.removeAttribute("href");
         payBtn.removeAttribute("target");
         payBtn.removeAttribute("rel");
-        payBtn.textContent = "Réserver — sur devis 💬";
-        payBtn.classList.add("is-devis");
+        payBtn.textContent = "Paiement bientôt en ligne";
+        payBtn.classList.add("is-soon");
+        payBtn.setAttribute("aria-disabled", "true");
       }
     }
   }

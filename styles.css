@@ -962,8 +962,7 @@ p { margin: 0 0 1rem; }
 .cake-actions .btn { margin-top: 0; }
 .btn-pay { background: var(--gold); color: #fff; border-color: var(--gold); }
 .btn-pay:hover { background: #9a7748; border-color: #9a7748; }
-.cake-pay.is-devis { background: transparent; color: var(--green); border-color: var(--green); }
-.cake-pay.is-devis:hover { background: var(--green); color: var(--cream-soft); }
+.cake-pay.is-soon { background: var(--cream-deep); color: var(--muted); border-color: var(--line); cursor: default; pointer-events: none; }
 
 /* Layer cake : actions par palier (payer + ajouter) */
 .tier-actions { margin-left: auto; display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }

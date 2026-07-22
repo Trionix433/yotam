@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ougot — Demande de devis</title>
+  <meta name="description" content="Demandez votre devis personnalisé Ougot : layer cake, number cake, plateaux desserts et buffets sur mesure." />
+  <meta name="theme-color" content="#3b473e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root{
+      --cream:#f7f2ea; --soft:#faf6ef; --cream-deep:#efe7d8; --cream-soft:#f7f2ea;
+      --green:#3b473e; --green-dark:#2f382f; --ink:#2b2b28; --muted:#6f6a61;
+      --gold:#b08b5a; --line:#e3d9c8;
+      --serif:"Cormorant Garamond",Georgia,serif; --sans:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --radius:8px; --ease:cubic-bezier(.22,.61,.36,1); --shadow:0 18px 44px rgba(43,43,40,.12);
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:var(--sans);color:var(--ink);
+      background:radial-gradient(ellipse at 70% -10%,rgba(176,139,90,.12),transparent 55%),linear-gradient(180deg,var(--soft),var(--cream));
+      min-height:100vh;}
+    a{color:inherit;text-decoration:none;}
+    .topbar{max-width:760px;margin:0 auto;padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+    .brand{display:flex;align-items:center;gap:.55rem;}
+    .brand img{width:34px;height:34px;}
+    .brand span{font-family:var(--serif);font-size:1.6rem;color:var(--green);font-weight:600;}
+    .back{font-size:.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:.35rem;}
+    .back:hover{color:var(--green);}
+    .wrap{max-width:760px;margin:0 auto;padding:26px 24px 60px;}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:clamp(24px,4vw,42px);}
+    .eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;color:var(--gold);font-weight:600;margin:0 0 .5rem;}
+    h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,4vw,2.6rem);line-height:1.1;margin:0 0 .6rem;color:var(--ink);}
+    .intro{color:var(--muted);line-height:1.6;margin:0 0 1.6rem;font-size:1rem;}
+    form{display:grid;grid-template-columns:1fr 1fr;gap:1rem 1.1rem;}
+    #fields{display:contents;}
+    .field{display:flex;flex-direction:column;gap:.4rem;}
+    .field.full{grid-column:1 / -1;}
+    label{font-size:.82rem;font-weight:500;color:var(--ink);}
+    label .req{color:var(--gold);}
+    input,select,textarea{
+      width:100%;font-family:var(--sans);font-size:.95rem;color:var(--ink);
+      padding:.8rem .9rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--soft);
+    }
+    textarea{resize:vertical;min-height:120px;}
+    select{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236f6a61' d='M6 8 0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .9rem center;padding-right:2.2rem;}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,139,90,.15);}
+    .chips{display:flex;flex-wrap:wrap;gap:.5rem;}
+    .chips input{position:absolute;opacity:0;pointer-events:none;}
+    .chips label{cursor:pointer;padding:.5rem .95rem;border:1px solid var(--line);border-radius:999px;background:var(--soft);font-size:.85rem;transition:all .18s var(--ease);}
+    .chips input:checked + label{background:var(--gold);border-color:var(--gold);color:#fff;}
+    .note{grid-column:1 / -1;font-size:.85rem;color:var(--muted);background:var(--cream-deep);border-radius:var(--radius);padding:.8rem 1rem;margin:.2rem 0;}
+    .submit{grid-column:1 / -1;margin-top:.4rem;}
+    button.send{width:100%;border:none;cursor:pointer;background:var(--green);color:var(--cream-soft);
+      font-family:var(--sans);font-size:.92rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+      padding:1rem;border-radius:var(--radius);transition:background .2s ease;}
+    button.send:hover{background:var(--green-dark);}
+    button.send:disabled{opacity:.6;cursor:default;}
+    .msg{grid-column:1 / -1;font-size:.92rem;line-height:1.5;margin:0;padding:.9rem 1rem;border-radius:var(--radius);}
+    .msg.ok{background:#e8efe6;color:var(--green-dark);}
+    .msg.err{background:#f7e7e4;color:#8a3b2e;}
+    .foot{text-align:center;color:var(--muted);font-size:.82rem;margin-top:1.4rem;}
+    .foot a{color:var(--green);font-weight:500;}
+    @media(max-width:560px){form{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="index.html" aria-label="Ougot — accueil">
+      <img src="assets/images/logo.svg" alt="" />
+      <span>Ougot</span>
+    </a>
+    <a class="back" href="index.html">← Retour au site</a>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <p class="eyebrow" id="eyebrow">Demande de devis</p>
+      <h1 id="title">Votre projet sur mesure</h1>
+      <p class="intro" id="intro">Décrivez-nous votre projet, nous vous recontactons rapidement avec un devis personnalisé.</p>
+      <form id="devis-form" novalidate>
+        <div id="fields"></div>
+      </form>
+    </div>
+    <p class="foot">Une question rapide ? Écrivez-nous au <a href="tel:+33769652949">07 69 65 29 49</a> · <a href="https://www.instagram.com/ougot___/" target="_blank" rel="noopener">@ougot___</a></p>
+  </div>
+
+  <script>
+  (function(){
+    "use strict";
+    var ENDPOINT = "https://formsubmit.co/ajax/ougot27@gmail.com";
+
+    var KIND = { name:"kind", label:"Pareve ou halavi ?", type:"chips", options:["Pareve","Halavi"], full:true };
+    var PAREVE_NOTE = { type:"note", text:"🌿 Nos plateaux et buffets sont exclusivement <strong>pareve</strong>." };
+
+    var CONFIG = {
+      "layer-cake": {
+        eyebrow:"Layer Cake sur mesure",
+        title:"Personnalisez votre Layer Cake",
+        intro:"Un gâteau à étages entièrement personnalisé : parfums, couleurs, décor et message. Dites-nous tout, on s'occupe du reste.",
+        subject:"🎂 Devis Layer Cake — Ougot",
+        fields:[
+          {name:"personnes",label:"Nombre de personnes",type:"text",placeholder:"ex. 20 personnes"},
+          {name:"date",label:"Date de l'événement",type:"date"},
+          {name:"parfums",label:"Parfums souhaités",type:"text",placeholder:"ex. vanille & fruits rouges",full:true},
+          {name:"couleurs",label:"Couleurs / thème",type:"text",placeholder:"ex. tons pastel, thème floral…",full:true},
+          {name:"message",label:"Message à écrire sur le gâteau",type:"text",placeholder:"ex. Joyeux anniversaire Sarah",full:true},
+          KIND,
+          {name:"details",label:"Décrivez votre projet",type:"textarea",placeholder:"Décor, étages, inspiration, contraintes… tout ce que vous imaginez.",full:true}
+        ]
+      },
+      "number-cake": {
+        eyebrow:"Number Cake sur mesure",
+        title:"Composez votre Number Cake",
+        intro:"Le chiffre de l'événement en biscuit fondant et crème onctueuse, avec la décoration de votre choix. À partir de 20 personnes.",
+        subject:"🔢 Devis Number Cake — Ougot",
+        fields:[
+          {name:"chiffre",label:"Chiffre(s) souhaité(s)",type:"text",placeholder:"ex. 30"},
+          {name:"personnes",label:"Nombre de personnes",type:"text",placeholder:"ex. 20 personnes"},
+          {name:"date",label:"Date de l'événement",type:"date"},
+          {name:"deco",label:"Décoration",type:"select",options:["Fruits rouges","Chocolats & confiseries","Thème personnalisé","À définir ensemble"]},
+          KIND,
+          {name:"details",label:"Décrivez votre projet",type:"textarea",placeholder:"Couleurs, parfums, thème, inspiration…",full:true}
+        ]
+      },
+      "plateau": {
+        eyebrow:"Plateaux desserts",
+        title:"Commandez votre plateau dessert",
+        intro:"Un assortiment de nos cinq pâtisseries signature en portions individuelles. Indiquez la taille et vos précisions.",
+        subject:"🍰 Devis Plateau dessert — Ougot",
+        fields:[
+          {name:"taille",label:"Taille du plateau",type:"select",options:["10 personnes — 50 pièces — 90 €","20 personnes — 100 pièces — 180 €","30 personnes — 150 pièces — 270 €"]},
+          {name:"date",label:"Date souhaitée",type:"date"},
+          {name:"livraison",label:"Livraison ou à emporter ?",type:"select",options:["À emporter","Livraison (Levallois & environs)"]},
+          PAREVE_NOTE,
+          {name:"details",label:"Précisions",type:"textarea",placeholder:"Occasion, préférences parmi les 5 pâtisseries, contraintes…",full:true}
+        ]
+      },
+      "buffet": {
+        eyebrow:"Buffets desserts",
+        title:"Organisez votre buffet dessert",
+        intro:"Un buffet dessert entièrement personnalisé pour vos réceptions. Racontez-nous votre événement.",
+        subject:"🎉 Devis Buffet — Ougot",
+        fields:[
+          {name:"evenement",label:"Type d'événement",type:"select",options:["Anniversaire","Mariage","Bar / Bat-mitsvah","Baptême","Baby shower","Événement professionnel","Autre"]},
+          {name:"convives",label:"Nombre de convives",type:"text",placeholder:"ex. 50 personnes"},
+          {name:"date",label:"Date de l'événement",type:"date"},
+          {name:"livraison",label:"Livraison ou à emporter ?",type:"select",options:["À emporter","Livraison (Levallois & environs)"]},
+          PAREVE_NOTE,
+          {name:"details",label:"Décrivez votre buffet",type:"textarea",placeholder:"Ambiance, pâtisseries souhaitées, budget indicatif, contraintes…",full:true}
+        ]
+      },
+      "sur-mesure": {
+        eyebrow:"Création sur mesure",
+        title:"Votre projet sur mesure",
+        intro:"Une envie particulière ? Décrivez votre idée, nous la réalisons sur mesure.",
+        subject:"✨ Devis création sur mesure — Ougot",
+        fields:[
+          {name:"personnes",label:"Nombre de personnes",type:"text",placeholder:"ex. 15 personnes"},
+          {name:"date",label:"Date souhaitée",type:"date"},
+          KIND,
+          {name:"details",label:"Décrivez votre projet",type:"textarea",placeholder:"Type de gâteau, occasion, parfums, décor, inspiration…",full:true}
+        ]
+      }
+    };
+
+    function param(k){ return new URLSearchParams(location.search).get(k); }
+    var type = param("type");
+    var cfg = CONFIG[type] || CONFIG["sur-mesure"];
+
+    document.getElementById("eyebrow").textContent = cfg.eyebrow;
+    document.getElementById("title").textContent = cfg.title;
+    document.getElementById("intro").textContent = cfg.intro;
+    document.title = "Ougot — " + cfg.eyebrow;
+
+    var host = document.getElementById("fields");
+
+    function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+    // Champs communs (contact) en premier
+    var common = [
+      {name:"nom",label:"Prénom & nom",type:"text",required:true,placeholder:"Votre nom"},
+      {name:"email",label:"E-mail",type:"email",required:true,placeholder:"vous@exemple.com"},
+      {name:"telephone",label:"Téléphone",type:"tel",placeholder:"06 12 34 56 78"}
+    ];
+
+    function fieldHTML(f){
+      if(f.type==="note"){ return '<div class="note">'+f.text+'</div>'; }
+      var full = f.full ? " full" : "";
+      var req = f.required ? ' <span class="req">*</span>' : "";
+      var inner = "";
+      if(f.type==="textarea"){
+        inner = '<textarea id="f-'+f.name+'" name="'+f.name+'" rows="4" placeholder="'+esc(f.placeholder||"")+'"'+(f.required?" required":"")+'></textarea>';
+      } else if(f.type==="select"){
+        inner = '<select id="f-'+f.name+'" name="'+f.name+'"><option value="">Choisir…</option>';
+        f.options.forEach(function(o){ inner += '<option>'+esc(o)+'</option>'; });
+        inner += '</select>';
+      } else if(f.type==="chips"){
+        inner = '<div class="chips">';
+        f.options.forEach(function(o,i){
+          var id="c-"+f.name+"-"+i;
+          inner += '<input type="radio" id="'+id+'" name="'+f.name+'" value="'+esc(o)+'"'+(i===0?" checked":"")+'><label for="'+id+'">'+esc(o)+'</label>';
+        });
+        inner += '</div>';
+      } else {
+        inner = '<input type="'+f.type+'" id="f-'+f.name+'" name="'+f.name+'" placeholder="'+esc(f.placeholder||"")+'"'+(f.required?" required":"")+'>';
+      }
+      return '<div class="field'+full+'"><label for="f-'+f.name+'">'+esc(f.label)+req+'</label>'+inner+'</div>';
+    }
+
+    var html = "";
+    common.forEach(function(f){ html += fieldHTML(f); });
+    cfg.fields.forEach(function(f){ html += fieldHTML(f); });
+    html += '<p class="msg" id="msg" hidden></p>';
+    html += '<div class="submit"><button type="submit" class="send" id="send">Envoyer ma demande de devis</button></div>';
+    host.innerHTML = html;
+
+    // Date minimum : 6 jours à l'avance
+    var d = new Date(); d.setDate(d.getDate()+6);
+    var min = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    document.querySelectorAll('input[type="date"]').forEach(function(el){ el.min = min; });
+
+    var form = document.getElementById("devis-form");
+    var msg = document.getElementById("msg");
+    var send = document.getElementById("send");
+
+    form.addEventListener("submit", function(e){
+      e.preventDefault();
+      var emailEl = document.getElementById("f-email");
+      if(!emailEl.value.trim()){ emailEl.focus(); return; }
+
+      var labels = {};
+      common.concat(cfg.fields).forEach(function(f){ if(f.name) labels[f.name]=f.label; });
+
+      var payload = { _subject: cfg.subject, _template:"table", _captcha:"false", "Sujet du devis": cfg.eyebrow };
+      var data = new FormData(form);
+      data.forEach(function(v,k){
+        if(v && String(v).trim()) payload[labels[k]||k] = v;
+      });
+
+      var original = send.textContent;
+      send.disabled = true; send.textContent = "Envoi…";
+      msg.hidden = true;
+
+      function finish(ok){
+        send.disabled = false; send.textContent = original;
+        msg.hidden = false;
+        msg.className = "msg " + (ok?"ok":"err");
+        msg.innerHTML = ok
+          ? "✓ Merci ! Votre demande de devis a bien été envoyée. Nous vous recontactons très vite."
+          : "Un souci d'envoi. Réessayez, ou écrivez-nous au 07 69 65 29 49.";
+        if(ok){ form.reset(); msg.scrollIntoView({behavior:"smooth",block:"center"}); }
+      }
+
+      fetch(ENDPOINT,{ method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify(payload) })
+        .then(function(r){ return r.json().catch(function(){return {};}); })
+        .then(function(){ finish(true); })
+        .catch(function(){ finish(false); });
+    });
+  })();
+  </script>
+</body>
+</html>
