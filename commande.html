@@ -133,7 +133,7 @@
               '<input type="radio" id="r-livr" name="reception" value="Livraison"><label for="r-livr">Livraison</label>' +
             '</div></div>';
     html += '<div class="field full" id="addr-wrap" hidden><label for="f-addr">Adresse de livraison <span class="req">*</span></label><input type="text" id="f-addr" name="adresse" placeholder="N°, rue, code postal, ville"></div>';
-    html += '<p class="note" id="addr-note" hidden>🚚 Livraison uniquement à <strong>Paris et ses alentours</strong> (Levallois-Perret et environs). Les frais éventuels vous sont confirmés.</p>';
+    html += '<p class="note" id="addr-note" hidden>🚚 Livraison à <strong>Paris et ses alentours</strong> (Levallois-Perret et environs) : <strong>+10 € de frais</strong>, à régler <strong>à l\'arrivée</strong> (en espèces au livreur). Le gâteau, lui, se règle en ligne par carte.</p>';
     html += '<div class="field full"><label for="f-precisions">Précisions / allergies</label><textarea id="f-precisions" name="precisions" placeholder="Allergies, intolérances, message sur le gâteau, demandes particulières…"></textarea></div>';
 
     html += '<div class="pay-block">';
@@ -210,6 +210,7 @@
         "Prix": prix ? (prix + " €") : "—",
         "Mode de paiement": modePaiement,
         "Mode de récupération": recep,
+        "Frais de livraison": document.getElementById("r-livr").checked ? "10 € (à régler à l'arrivée, en espèces)" : "—",
         "Adresse de livraison": document.getElementById("r-livr").checked ? (addrInput.value.trim() || "—") : "—",
         "Date souhaitée": document.getElementById("f-date").value || "—",
         "Prénom & nom": document.getElementById("f-nom").value.trim(),
