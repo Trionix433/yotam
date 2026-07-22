@@ -902,3 +902,7 @@ p { margin: 0 0 1rem; }
 .cake-actions .btn { margin-top: 0; }
 .btn-pay { background: var(--gold); color: #fff; border-color: var(--gold); }
 .btn-pay:hover { background: #9a7748; border-color: #9a7748; }
+
+/* Layer cake : actions par palier (payer + ajouter) */
+.tier-actions { margin-left: auto; display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.tier-actions .add-to-cart { margin-left: 0; }
