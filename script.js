@@ -377,3 +377,60 @@
 
   render();
 })();
+
+/* =========================================================
+   Devis rapide (pied de page) → e-mail à Ougot
+   ========================================================= */
+(function () {
+  "use strict";
+  var DEVIS_ENDPOINT = "https://formsubmit.co/ajax/Marecyotam27@gmail.com";
+  var form = document.getElementById("devis-form");
+  if (!form) return;
+  var input = form.querySelector('input[type="email"]');
+  var btn = form.querySelector('button[type="submit"]');
+  var msg = document.getElementById("devis-msg");
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    var email = (input.value || "").trim();
+    if (!email) return;
+    var original = btn.textContent;
+    btn.disabled = true;
+    btn.textContent = "Envoi…";
+
+    var payload = {
+      email: email,
+      _subject: "📩 Demande de devis — Ougot",
+      _template: "table",
+      _captcha: "false",
+      "Type de demande": "Devis / être recontacté",
+      "E-mail du client": email
+    };
+
+    function finish(ok) {
+      btn.disabled = false;
+      btn.textContent = original;
+      if (msg) {
+        msg.hidden = false;
+        msg.textContent = ok
+          ? "✓ Merci ! Votre demande est envoyée, on vous recontacte très vite."
+          : "Un souci d'envoi. Réessayez, ou écrivez-nous au 07 69 65 29 49.";
+        msg.style.color = ok ? "var(--cream-soft)" : "#f0b8b0";
+      }
+      if (ok) input.value = "";
+    }
+
+    if (window.fetch) {
+      fetch(DEVIS_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", "Accept": "application/json" },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) { return r.json().catch(function () { return {}; }); })
+        .then(function () { finish(true); })
+        .catch(function () { finish(false); });
+    } else {
+      finish(false);
+    }
+  });
+})();

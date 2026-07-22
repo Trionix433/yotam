@@ -906,3 +906,7 @@ p { margin: 0 0 1rem; }
 /* Layer cake : actions par palier (payer + ajouter) */
 .tier-actions { margin-left: auto; display: flex; gap: .4rem; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
 .tier-actions .add-to-cart { margin-left: 0; }
+
+/* Devis rapide (pied de page) */
+.footer-devis-text { font-size: .85rem; color: rgba(247,242,234,.7); margin: 0 0 .8rem; }
+.footer-devis-msg { font-size: .85rem; margin: .8rem 0 0; line-height: 1.5; }

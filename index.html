@@ -418,11 +418,13 @@
       </div>
       <div class="footer-col">
         <h3>Devis rapide</h3>
-        <form class="footer-form" onsubmit="return false;">
+        <p class="footer-devis-text">Une envie sur mesure ? Laissez votre e-mail, on vous recontacte pour votre devis.</p>
+        <form class="footer-form" id="devis-form">
           <label for="ff-email" class="visually-hidden">Votre e-mail</label>
           <input id="ff-email" type="email" placeholder="Votre e-mail" required />
           <button type="submit" class="btn btn-primary btn-block">Être recontacté</button>
         </form>
+        <p class="footer-devis-msg" id="devis-msg" hidden></p>
       </div>
     </div>
     <div class="container footer-bottom">
