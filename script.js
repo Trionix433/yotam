@@ -95,144 +95,16 @@
 })();
 
 /* =========================================================
-   Boutique : panier (sélection) -> paiement Stripe par article
+   Gâteaux : sélection (taille + pareve/halavi) -> page de commande
    ========================================================= */
 (function () {
   "use strict";
 
-  var cart = [];
-  try {
-    var saved = localStorage.getItem("ougot_cart");
-    if (saved) cart = JSON.parse(saved) || [];
-  } catch (e) { cart = []; }
-  // Nettoyage d'anciens paniers (ancien format avec quantités)
-  cart = cart.filter(function (it) { return it && it.name; });
-
-  var overlay = document.getElementById("cart-overlay");
-  var drawer  = document.getElementById("cart-drawer");
-  var openBtn = document.getElementById("cart-btn");
-  var closeBtn= document.getElementById("cart-close");
-  var countEl = document.getElementById("cart-count");
-  var itemsEl = document.getElementById("cart-items");
-  var emptyEl = document.getElementById("cart-empty");
-  var payNote = document.getElementById("cart-pay-note");
-
-  if (!drawer) return;
-
-  function save() { try { localStorage.setItem("ougot_cart", JSON.stringify(cart)); } catch (e) {} }
-  function euros(n) { return n.toLocaleString("fr-FR") + " €"; }
-  function esc(s) {
-    return String(s).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
-
-  // Clé unique d'un article (nom + taille + pareve/halavi)
-  cart.forEach(function (it) { if (!it.key) it.key = it.name + "|" + (it.serves || ""); });
-
-  function inCart(key) {
-    for (var i = 0; i < cart.length; i++) if (cart[i].key === key) return true;
-    return false;
-  }
-  function addToCart(item) {
-    if (!inCart(item.key)) cart.push(item);
-    save(); render();
-  }
-  function removeItem(key) {
-    cart = cart.filter(function (i) { return i.key !== key; });
-    save(); render();
-  }
-
-  function render() {
-    var c = cart.length;
-    if (c > 0) { countEl.hidden = false; countEl.textContent = c; }
-    else { countEl.hidden = true; }
-
-    itemsEl.innerHTML = "";
-    if (c === 0) {
-      emptyEl.hidden = false;
-      if (payNote) payNote.hidden = true;
-      return;
-    }
-    emptyEl.hidden = true;
-    if (payNote) payNote.hidden = false;
-
-    cart.forEach(function (it) {
-      var li = document.createElement("li");
-      li.className = "cart-item";
-      var action = it.pay
-        ? '<a class="btn btn-pay btn-sm ci-pay" href="' + esc(it.pay) + '" target="_blank" rel="noopener">Payer 💳</a>'
-        : '<span class="ci-devis">Sur devis</span>';
-      li.innerHTML =
-        '<h4>' + esc(it.name) + '</h4>' +
-        '<span class="ci-price">' + euros(it.price) + '</span>' +
-        (it.serves ? '<span class="ci-serves">' + esc(it.serves) + '</span>' : '<span></span>') +
-        action +
-        '<button type="button" class="ci-remove">Retirer</button>';
-      li.querySelector(".ci-remove").addEventListener("click", function () { removeItem(it.key); });
-      itemsEl.appendChild(li);
-    });
-  }
-
-  function openDrawer() {
-    overlay.hidden = false;
-    requestAnimationFrame(function () { overlay.classList.add("is-open"); });
-    drawer.classList.add("is-open");
-    drawer.setAttribute("aria-hidden", "false");
-    document.body.style.overflow = "hidden";
-  }
-  function closeDrawer() {
-    overlay.classList.remove("is-open");
-    drawer.classList.remove("is-open");
-    drawer.setAttribute("aria-hidden", "true");
-    document.body.style.overflow = "";
-    setTimeout(function () { overlay.hidden = true; }, 320);
-  }
-
-  // Lecture de la sélection (taille + pareve/halavi) d'une carte gâteau
-  function readCake(card) {
-    var name = (card.querySelector("h3") || {}).textContent || "";
-    name = name.trim();
-    var size = card.querySelector(".opt-size .opt.is-active");
-    var kind = card.querySelector(".opt-kind .opt.is-active");
-    var serves = size ? size.dataset.serves : "";
-    var price = size ? parseFloat(size.dataset.price) : 0;
-    var pay = size ? (size.dataset.pay || "") : "";
-    var k = kind ? kind.dataset.kind : "";
-    var serveLabel = (serves ? serves : "") + (k ? " · " + k : "");
-    return {
-      name: name,
-      price: price,
-      serves: serveLabel,
-      pay: pay,
-      key: name + "|" + serves + "|" + k
-    };
-  }
-
-  // Met à jour le prix affiché + le bouton « Payer » selon la taille choisie
-  function updateCard(card) {
+  // Met à jour le prix affiché selon la taille choisie
+  function updatePrice(card) {
     var size = card.querySelector(".opt-size .opt.is-active");
     var priceEl = card.querySelector(".price");
-    var payBtn = card.querySelector(".cake-pay");
     if (size && priceEl) priceEl.textContent = size.dataset.price + " €";
-    if (size && payBtn) {
-      var pay = size.dataset.pay || "";
-      if (pay) {
-        payBtn.setAttribute("href", pay);
-        payBtn.setAttribute("target", "_blank");
-        payBtn.setAttribute("rel", "noopener");
-        payBtn.textContent = "Payer en ligne 💳";
-        payBtn.classList.remove("is-soon");
-        payBtn.removeAttribute("aria-disabled");
-      } else {
-        payBtn.removeAttribute("href");
-        payBtn.removeAttribute("target");
-        payBtn.removeAttribute("rel");
-        payBtn.textContent = "Paiement bientôt en ligne";
-        payBtn.classList.add("is-soon");
-        payBtn.setAttribute("aria-disabled", "true");
-      }
-    }
   }
 
   // Rappel du délai de 6 jours sur chaque carte gâteau
@@ -243,56 +115,35 @@
     actions.parentNode.insertBefore(p, actions);
   });
 
-  // Rappel obligatoire du délai avant tout paiement (Stripe)
-  var DELAY_MSG =
-    "🗓️ Rappel important\n\n" +
-    "Toute commande doit être passée au minimum 6 JOURS avant la date souhaitée.\n\n" +
-    "Souhaitez-vous continuer vers le paiement ?";
-  document.addEventListener("click", function (e) {
-    var a = e.target.closest && e.target.closest("a.btn-pay");
-    if (!a) return;
-    if (a.classList.contains("is-soon") || !a.getAttribute("href")) { e.preventDefault(); return; }
-    if (!window.confirm(DELAY_MSG)) e.preventDefault();
-  });
-
   // Boutons d'option (taille / pareve-halavi)
   document.querySelectorAll(".cake .opt-group").forEach(function (group) {
     group.querySelectorAll(".opt").forEach(function (opt) {
       opt.addEventListener("click", function () {
         group.querySelectorAll(".opt").forEach(function (o) { o.classList.remove("is-active"); });
         opt.classList.add("is-active");
-        updateCard(group.closest(".cake"));
+        updatePrice(group.closest(".cake"));
       });
     });
   });
 
-  document.querySelectorAll(".add-to-cart").forEach(function (btn) {
+  // Bouton « Commander » -> page de commande avec la sélection
+  document.querySelectorAll(".cake .cake-order").forEach(function (btn) {
     btn.addEventListener("click", function () {
       var card = btn.closest(".cake");
-      var item = card
-        ? readCake(card)
-        : {
-            name: btn.dataset.name,
-            price: parseFloat(btn.dataset.price),
-            serves: btn.dataset.serves || "",
-            pay: btn.dataset.pay || "",
-            key: btn.dataset.name + "|" + (btn.dataset.serves || "")
-          };
-      addToCart(item);
-      var label = btn.textContent;
-      btn.textContent = "✓ Ajouté";
-      btn.classList.add("added");
-      setTimeout(function () { btn.textContent = label; btn.classList.remove("added"); }, 1100);
-      openDrawer();
+      if (!card) return;
+      var name = (card.querySelector("h3") || {}).textContent.trim();
+      var size = card.querySelector(".opt-size .opt.is-active");
+      var kind = card.querySelector(".opt-kind .opt.is-active");
+      var params = new URLSearchParams({
+        produit: name,
+        taille: size ? (size.dataset.serves || "") : "",
+        prix: size ? (size.dataset.price || "") : "",
+        kind: kind ? (kind.dataset.kind || "") : "",
+        pay: size ? (size.dataset.pay || "") : ""
+      });
+      window.location.href = "commande.html?" + params.toString();
     });
   });
-
-  openBtn.addEventListener("click", openDrawer);
-  closeBtn.addEventListener("click", closeDrawer);
-  overlay.addEventListener("click", closeDrawer);
-  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && drawer.classList.contains("is-open")) closeDrawer(); });
-
-  render();
 })();
 
 /* =========================================================

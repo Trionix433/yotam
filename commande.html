@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ougot — Commander</title>
+  <meta name="description" content="Commandez votre gâteau Ougot : date, retrait ou livraison, précisions, puis paiement en ligne ou sur place." />
+  <meta name="theme-color" content="#3b473e" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="icon" href="assets/images/favicon.svg" type="image/svg+xml" />
+  <style>
+    :root{
+      --cream:#f7f2ea; --soft:#faf6ef; --cream-deep:#efe7d8; --cream-soft:#f7f2ea;
+      --green:#3b473e; --green-dark:#2f382f; --ink:#2b2b28; --muted:#6f6a61;
+      --gold:#b08b5a; --line:#e3d9c8;
+      --serif:"Cormorant Garamond",Georgia,serif; --sans:"Jost",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      --radius:8px; --ease:cubic-bezier(.22,.61,.36,1); --shadow:0 18px 44px rgba(43,43,40,.12);
+    }
+    *{box-sizing:border-box;}
+    body{margin:0;font-family:var(--sans);color:var(--ink);
+      background:radial-gradient(ellipse at 70% -10%,rgba(176,139,90,.12),transparent 55%),linear-gradient(180deg,var(--soft),var(--cream));
+      min-height:100vh;}
+    a{color:inherit;text-decoration:none;}
+    .topbar{max-width:760px;margin:0 auto;padding:22px 24px 0;display:flex;align-items:center;justify-content:space-between;gap:1rem;}
+    .brand{display:flex;align-items:center;gap:.55rem;}
+    .brand img{width:34px;height:34px;}
+    .brand span{font-family:var(--serif);font-size:1.6rem;color:var(--green);font-weight:600;}
+    .back{font-size:.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:.35rem;}
+    .back:hover{color:var(--green);}
+    .wrap{max-width:760px;margin:0 auto;padding:26px 24px 60px;}
+    .card{background:#fff;border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);padding:clamp(24px,4vw,42px);}
+    .eyebrow{text-transform:uppercase;letter-spacing:.22em;font-size:.72rem;color:var(--gold);font-weight:600;margin:0 0 .5rem;}
+    h1{font-family:var(--serif);font-weight:600;font-size:clamp(1.9rem,4vw,2.6rem);line-height:1.1;margin:0 0 1.2rem;color:var(--ink);}
+    .summary{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+      background:var(--cream-deep);border-radius:12px;padding:1rem 1.2rem;margin:0 0 1.4rem;}
+    .summary .s-name{font-family:var(--serif);font-size:1.5rem;color:var(--green);font-weight:600;}
+    .summary .s-meta{font-size:.9rem;color:var(--muted);margin-top:.2rem;}
+    .summary .s-price{font-family:var(--serif);font-size:1.8rem;color:var(--ink);font-weight:600;white-space:nowrap;}
+    .delay{font-size:.85rem;color:var(--green);background:rgba(176,139,90,.12);border:1px solid rgba(176,139,90,.3);
+      border-radius:var(--radius);padding:.6rem .9rem;margin:0 0 1.4rem;text-align:center;}
+    form{display:grid;grid-template-columns:1fr 1fr;gap:1rem 1.1rem;}
+    #fields{display:contents;}
+    .field{display:flex;flex-direction:column;gap:.4rem;}
+    .field.full{grid-column:1 / -1;}
+    label{font-size:.82rem;font-weight:500;color:var(--ink);}
+    label .req{color:var(--gold);}
+    input,select,textarea{width:100%;font-family:var(--sans);font-size:.95rem;color:var(--ink);
+      padding:.8rem .9rem;border:1px solid var(--line);border-radius:var(--radius);background:var(--soft);}
+    textarea{resize:vertical;min-height:90px;}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(176,139,90,.15);}
+    .chips{display:flex;flex-wrap:wrap;gap:.5rem;}
+    .chips input{position:absolute;opacity:0;pointer-events:none;}
+    .chips label{cursor:pointer;padding:.55rem 1.1rem;border:1px solid var(--line);border-radius:999px;background:var(--soft);font-size:.9rem;transition:all .18s var(--ease);}
+    .chips input:checked + label{background:var(--gold);border-color:var(--gold);color:#fff;}
+    .note{grid-column:1 / -1;font-size:.85rem;color:var(--muted);background:var(--cream-deep);border-radius:var(--radius);padding:.75rem 1rem;margin:0;}
+    .pay-block{grid-column:1 / -1;display:grid;gap:.7rem;margin-top:.6rem;}
+    button.send{width:100%;border:none;cursor:pointer;font-family:var(--sans);font-size:.92rem;font-weight:600;
+      letter-spacing:.05em;text-transform:uppercase;padding:1rem;border-radius:var(--radius);transition:all .2s ease;}
+    .pay-online{background:var(--green);color:var(--cream-soft);}
+    .pay-online:hover{background:var(--green-dark);}
+    .pay-onsite{background:transparent;color:var(--green);border:1px solid var(--green)!important;}
+    .pay-onsite:hover{background:var(--green);color:var(--cream-soft);}
+    button.send:disabled{opacity:.6;cursor:default;}
+    .msg{grid-column:1 / -1;font-size:.92rem;line-height:1.5;margin:.2rem 0 0;padding:.9rem 1rem;border-radius:var(--radius);}
+    .msg.ok{background:#e8efe6;color:var(--green-dark);}
+    .msg.err{background:#f7e7e4;color:#8a3b2e;}
+    .foot{text-align:center;color:var(--muted);font-size:.82rem;margin-top:1.4rem;}
+    .foot a{color:var(--green);font-weight:500;}
+    [hidden]{display:none!important;}
+    @media(max-width:560px){form{grid-template-columns:1fr;}}
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    <a class="brand" href="index.html" aria-label="Ougot — accueil">
+      <img src="assets/images/logo.svg" alt="" />
+      <span>Ougot</span>
+    </a>
+    <a class="back" href="index.html#creations">← Retour aux gâteaux</a>
+  </div>
+
+  <div class="wrap">
+    <div class="card">
+      <p class="eyebrow">Votre commande</p>
+      <h1 id="title">Commander votre gâteau</h1>
+
+      <div class="summary">
+        <div>
+          <div class="s-name" id="s-name">—</div>
+          <div class="s-meta" id="s-meta"></div>
+        </div>
+        <div class="s-price" id="s-price"></div>
+      </div>
+
+      <p class="delay">🗓️ Commande à passer <strong>au moins 6 jours à l'avance</strong>.</p>
+
+      <form id="order-form" novalidate>
+        <div id="fields"></div>
+      </form>
+    </div>
+    <p class="foot">Une question ? <a href="tel:+33769652949">07 69 65 29 49</a> · <a href="https://www.instagram.com/ougot___/" target="_blank" rel="noopener">@ougot___</a></p>
+  </div>
+
+  <script>
+  (function(){
+    "use strict";
+    var ENDPOINT = "https://formsubmit.co/ajax/ougot27@gmail.com";
+
+    function param(k){ return new URLSearchParams(location.search).get(k) || ""; }
+    var produit = param("produit") || "Gâteau";
+    var taille  = param("taille");
+    var prix    = param("prix");
+    var kind    = param("kind");
+    var pay     = param("pay");
+
+    document.title = "Ougot — Commander " + produit;
+    document.getElementById("s-name").textContent = produit;
+    document.getElementById("s-meta").textContent = [taille, kind].filter(Boolean).join(" · ");
+    document.getElementById("s-price").textContent = prix ? (prix + " €") : "";
+
+    function esc(s){ return String(s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+
+    var host = document.getElementById("fields");
+    var html = "";
+    html += '<div class="field"><label for="f-nom">Prénom & nom <span class="req">*</span></label><input type="text" id="f-nom" name="nom" placeholder="Votre nom" required></div>';
+    html += '<div class="field"><label for="f-email">E-mail <span class="req">*</span></label><input type="email" id="f-email" name="email" placeholder="vous@exemple.com" required></div>';
+    html += '<div class="field"><label for="f-tel">Téléphone</label><input type="tel" id="f-tel" name="tel" placeholder="06 12 34 56 78"></div>';
+    html += '<div class="field"><label for="f-date">Date de retrait / livraison <span class="req">*</span></label><input type="date" id="f-date" name="date" required></div>';
+    html += '<div class="field full"><label>Mode de récupération <span class="req">*</span></label><div class="chips">' +
+              '<input type="radio" id="r-retrait" name="reception" value="Retrait sur place" checked><label for="r-retrait">Retrait sur place</label>' +
+              '<input type="radio" id="r-livr" name="reception" value="Livraison"><label for="r-livr">Livraison</label>' +
+            '</div></div>';
+    html += '<div class="field full" id="addr-wrap" hidden><label for="f-addr">Adresse de livraison <span class="req">*</span></label><input type="text" id="f-addr" name="adresse" placeholder="N°, rue, code postal, ville"></div>';
+    html += '<p class="note" id="addr-note" hidden>🚚 Livraison uniquement à <strong>Paris et ses alentours</strong> (Levallois-Perret et environs). Les frais éventuels vous sont confirmés.</p>';
+    html += '<div class="field full"><label for="f-precisions">Précisions / allergies</label><textarea id="f-precisions" name="precisions" placeholder="Allergies, intolérances, message sur le gâteau, demandes particulières…"></textarea></div>';
+
+    html += '<div class="pay-block">';
+    if (pay) {
+      html += '<button type="button" class="send pay-online" id="btn-online">Passer au paiement 💳</button>';
+    } else {
+      html += '<p class="note">💳 Le paiement en ligne pour ce format arrive bientôt. Vous pouvez commander dès maintenant et régler au retrait.</p>';
+    }
+    html += '<button type="button" class="send pay-onsite" id="btn-onsite">Payer sur place (au retrait)</button>';
+    html += '</div>';
+    html += '<p class="msg" id="msg" hidden></p>';
+    host.innerHTML = html;
+
+    // Date minimum : 6 jours à l'avance
+    var d = new Date(); d.setDate(d.getDate()+6);
+    var min = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+    document.getElementById("f-date").min = min;
+
+    // Affichage adresse si livraison
+    var addrWrap = document.getElementById("addr-wrap");
+    var addrNote = document.getElementById("addr-note");
+    var addrInput = document.getElementById("f-addr");
+    document.querySelectorAll('input[name="reception"]').forEach(function(r){
+      r.addEventListener("change", function(){
+        var livr = document.getElementById("r-livr").checked;
+        addrWrap.hidden = !livr; addrNote.hidden = !livr;
+      });
+    });
+
+    var msg = document.getElementById("msg");
+    function showMsg(ok, text){ msg.hidden=false; msg.className="msg "+(ok?"ok":"err"); msg.innerHTML=text; msg.scrollIntoView({behavior:"smooth",block:"center"}); }
+
+    function validate(){
+      var nom = document.getElementById("f-nom").value.trim();
+      var email = document.getElementById("f-email").value.trim();
+      var date = document.getElementById("f-date").value;
+      var livr = document.getElementById("r-livr").checked;
+      if(!nom){ document.getElementById("f-nom").focus(); return false; }
+      if(!email){ document.getElementById("f-email").focus(); return false; }
+      if(!date){ document.getElementById("f-date").focus(); return false; }
+      if(livr && !addrInput.value.trim()){ addrInput.focus(); return false; }
+      return true;
+    }
+
+    function buildPayload(modePaiement){
+      var recep = (document.querySelector('input[name="reception"]:checked')||{}).value || "";
+      return {
+        _subject: "🛒 Commande " + produit + " — Ougot",
+        _template: "table",
+        _captcha: "false",
+        "Produit": produit,
+        "Taille": taille || "—",
+        "Cacherout": kind || "—",
+        "Prix": prix ? (prix + " €") : "—",
+        "Mode de paiement": modePaiement,
+        "Mode de récupération": recep,
+        "Adresse de livraison": document.getElementById("r-livr").checked ? (addrInput.value.trim() || "—") : "—",
+        "Date souhaitée": document.getElementById("f-date").value || "—",
+        "Prénom & nom": document.getElementById("f-nom").value.trim(),
+        "E-mail": document.getElementById("f-email").value.trim(),
+        "Téléphone": document.getElementById("f-tel").value.trim() || "—",
+        "Précisions / allergies": document.getElementById("f-precisions").value.trim() || "—"
+      };
+    }
+
+    function send(modePaiement, btn, onDone){
+      if(!validate()) return;
+      var original = btn.textContent;
+      var others = document.querySelectorAll(".send");
+      others.forEach(function(b){ b.disabled = true; });
+      btn.textContent = "Envoi…";
+      fetch(ENDPOINT,{ method:"POST", headers:{"Content-Type":"application/json","Accept":"application/json"}, body:JSON.stringify(buildPayload(modePaiement)) })
+        .then(function(r){ return r.json().catch(function(){return {};}); })
+        .then(function(){ onDone(true); })
+        .catch(function(){ others.forEach(function(b){ b.disabled=false; }); btn.textContent=original;
+          showMsg(false, "Un souci d'envoi. Réessayez, ou écrivez-nous au 07 69 65 29 49."); });
+    }
+
+    var btnOnline = document.getElementById("btn-online");
+    if (btnOnline) {
+      btnOnline.addEventListener("click", function(){
+        send("Paiement en ligne (carte)", btnOnline, function(){
+          showMsg(true, "✓ Commande enregistrée ! Redirection vers le paiement sécurisé…");
+          setTimeout(function(){ window.location.href = pay; }, 1400);
+        });
+      });
+    }
+    document.getElementById("btn-onsite").addEventListener("click", function(){
+      var b = document.getElementById("btn-onsite");
+      send("Paiement sur place (au retrait)", b, function(){
+        showMsg(true, "✓ Merci ! Votre commande est enregistrée. Vous réglerez au retrait. Nous vous recontactons pour la confirmer.");
+        b.textContent = "Commande envoyée ✓";
+      });
+    });
+  })();
+  </script>
+</body>
+</html>
