@@ -150,7 +150,16 @@
     // Date minimum : 6 jours à l'avance
     var d = new Date(); d.setDate(d.getDate()+6);
     var min = d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-    document.getElementById("f-date").min = min;
+    var frMin = String(d.getDate()).padStart(2,"0")+"/"+String(d.getMonth()+1).padStart(2,"0")+"/"+d.getFullYear();
+    var dateEl = document.getElementById("f-date");
+    dateEl.min = min;
+    // Blocage en dur (le min natif n'est pas fiable sur mobile)
+    dateEl.addEventListener("change", function(){
+      if (dateEl.value && dateEl.value < min) {
+        dateEl.value = "";
+        showMsg(false, "🗓️ Date trop proche : il faut un délai d'au moins 6 jours. Première date possible : le " + frMin + ".");
+      }
+    });
 
     // Affichage adresse si livraison
     var addrWrap = document.getElementById("addr-wrap");
@@ -174,6 +183,7 @@
       if(!nom){ document.getElementById("f-nom").focus(); return false; }
       if(!email){ document.getElementById("f-email").focus(); return false; }
       if(!date){ document.getElementById("f-date").focus(); return false; }
+      if(date < min){ dateEl.value=""; dateEl.focus(); showMsg(false, "🗓️ Date trop proche : il faut un délai d'au moins 6 jours. Première date possible : le " + frMin + "."); return false; }
       if(livr && !addrInput.value.trim()){ addrInput.focus(); return false; }
       return true;
     }
