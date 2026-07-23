@@ -9,7 +9,7 @@
    site se rouvre tout seul. Laisse "" si tu rouvres à la main.
    ========================================================= */
 window.OUGOT_STATUS = {
-  open: true,
+  open: false,
   reopenAt: "",
   message: "Nous sommes momentanément fermés. Les commandes rouvrent très vite — merci de votre patience !"
 };
