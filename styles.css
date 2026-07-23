@@ -520,7 +520,7 @@ p { margin: 0 0 1rem; }
 }
 .about-media img {
   width: 100%;
-  aspect-ratio: 5 / 6;
+  aspect-ratio: 3 / 2;
   object-fit: cover;
   border-radius: 6px;
   box-shadow: var(--shadow-md);
