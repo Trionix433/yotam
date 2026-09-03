@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 750" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Tiramisu">
+  <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3ead9"/><stop offset="1" stop-color="#e6d8c1"/></linearGradient></defs>
+  <rect width="1000" height="750" fill="url(#g)"/>
+  <g fill="none" stroke="#b08b5a" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" opacity="0.85" transform="translate(500 315)">
+    <path d="M-40 -6 h80 v34 a8 8 0 0 1 -8 8 h-64 a8 8 0 0 1 -8 -8 z"/>
+    <path d="M-40 -6 c0 -8 18 -14 40 -14 c22 0 40 6 40 14"/>
+    <path d="M-30 4 q10 8 20 0 q10 -8 20 0 q10 8 20 0"/>
+  </g>
+  <text x="50%" y="415" text-anchor="middle" font-family="Georgia,'Times New Roman',serif" font-size="30" fill="#7d6b4f">Tiramisu</text>
+  <text x="50%" y="450" text-anchor="middle" font-family="Arial,sans-serif" font-size="13" letter-spacing="2" fill="#a7906c">PHOTO À VENIR</text>
+</svg>
